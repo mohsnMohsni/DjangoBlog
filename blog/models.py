@@ -85,7 +85,7 @@ class Comment(models.Model):
         ordering = ['-create_at']
 
     def __str__(self):
-        return self.author
+        return self.content
 
     @property
     def like_count(self):

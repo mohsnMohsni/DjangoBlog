@@ -11,6 +11,14 @@ def home(request):
 
 
 def single(request, slug):
-  post = get_object_or_404(models.Post, slug=slug)
+  # post = get_object_or_404(models.Post)
+  post = models.Post.objects.get(slug=slug)
   to_html = f"<html><h1>{post.title}</h1><br/></html>"
   return HttpResponse(to_html)
+
+
+def category(request):
+    catagory = models.Category.objects.all()
+    list_catagory = [f"<li><a href='{cat.slug}'>"+str(cat)+"</a></li>" for cat in catagory]
+    final = f"{''.join(list_catagory)}"
+    return HttpResponse(final)
