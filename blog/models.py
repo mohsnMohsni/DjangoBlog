@@ -42,7 +42,7 @@ class Post(models.Model):
 
     @property
     def comment_count(self):
-        q = Comment.objects.filter(post=self)
+        q = self.comments.all()
         return q.count()
 
     @property
@@ -88,7 +88,7 @@ class CommentLike(models.Model):
 class Comment(models.Model):
     content = models.TextField(_("Content"))
     post = models.ForeignKey(Post, verbose_name=_(
-        "Post"), on_delete=models.CASCADE)
+        "Post"), on_delete=models.CASCADE, related_name='comments', related_query_name='comments')
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     author = models.ForeignKey(User, verbose_name=_(

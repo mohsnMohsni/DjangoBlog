@@ -72,13 +72,18 @@ class CommentAdmin(admin.ModelAdmin):
 class CommentLikeAdmin(admin.ModelAdmin):
     list_display = ('author', 'condition')
     raw_id_fields = ('comment', 'author')
-    action = ['set_like']
+    actions = ['set_like', 'set_dislike']
     list_per_page = 10
 
     def set_like(self, request, queryset):
         queryset.update(condition=True)
 
-    set_like.short_description = "Set like for comment"
+    set_like.short_description = "Set like comment"
+
+    def set_dislike(self, request, queryset):
+        queryset.update(condition=False)
+
+    set_dislike.short_description = "Set dislike comment"
 
 
 admin.site.register(models.Category, CategoryAdmin)
