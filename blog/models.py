@@ -50,6 +50,7 @@ class Post(models.Model):
         converted_date = f"{self.publish_time.day} - {self.publish_time.month} - {self.publish_time.year}"
         return converted_date
 
+    @property
     def convert_create_date(self):
         converted_date = f"{self.create_at.day} - {self.create_at.month} - {self.create_at.year}"
         return converted_date
