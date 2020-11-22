@@ -25,8 +25,10 @@ class Post(models.Model):
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     publish_time = models.DateTimeField(_("Publish at"), db_index=True)
     draft = models.BooleanField(_("Draft"), default=True, db_index=True)
-    image = models.ImageField(_("image"), upload_to='post/images', null=True, blank=True)
-    category = models.ForeignKey(Category, verbose_name=_("Category"), on_delete=models.CASCADE, null=True, blank=True)
+    image = models.ImageField(
+        _("image"), upload_to='post/images', null=True, blank=True)
+    category = models.ForeignKey(Category, verbose_name=_(
+        "Category"), on_delete=models.CASCADE, null=True, blank=True)
     author = models.ForeignKey(User, verbose_name=_("Author"), related_name="posts", related_query_name="children",
                                on_delete=models.CASCADE)
 
@@ -37,6 +39,20 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def comment_count(self):
+        q = Comment.objects.filter(post=self)
+        return q.count()
+
+    @property
+    def convert_publish_date(self):
+        converted_date = f"{self.publish_time.day} - {self.publish_time.month} - {self.publish_time.year}"
+        return converted_date
+
+    def convert_create_date(self):
+        converted_date = f"{self.create_at.day} - {self.create_at.month} - {self.create_at.year}"
+        return converted_date
 
 
 class PostSetting(models.Model):
@@ -85,7 +101,7 @@ class Comment(models.Model):
         ordering = ['-create_at']
 
     def __str__(self):
-        return self.content
+        return self.content[:10]
 
     @property
     def like_count(self):

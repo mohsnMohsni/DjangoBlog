@@ -19,6 +19,8 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('slug', 'title', 'parent',)
     search_fields = ('slug', 'title',)
     list_filter = ('parent',)
+    prepopulated_fields = {'slug': ('title',)}
+    list_per_page = 4
     inlines = [
         ChildrenItemInline,
         PostItemInline,
@@ -31,10 +33,14 @@ class PostSettingStackInline(admin.StackedInline):
 
 @admin.register(models.Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'create_at', 'publish_time', 'draft', 'author',)
+    list_display = ('title', 'convert_create_date',
+                    'convert_publish_date', 'draft', 'author', 'comment_count')
     search_fields = ('title', 'content',)
     list_filter = ('draft', 'category',)
     date_hierarchy = 'publish_time'
+    prepopulated_fields = {'slug': ('title',)}
+    raw_id_fields = ('author',)
+    list_per_page = 4
     inlines = [
         PostSettingStackInline,
     ]
@@ -54,14 +60,25 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(models.Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('post', 'author', 'is_confirmed', 'like_count', 'dis_like_count',)
+    list_display = ('post', 'author', 'is_confirmed',
+                    'like_count', 'dis_like_count',)
     search_fields = ('content',)
     list_filter = ('author', 'is_confirmed',)
+    list_editable = ('is_confirmed',)
+    list_per_page = 6
 
 
 @admin.register(models.CommentLike)
 class CommentLikeAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('author', 'condition')
+    raw_id_fields = ('comment', 'author')
+    action = ['set_like']
+    list_per_page = 10
+
+    def set_like(self, request, queryset):
+        queryset.update(condition=True)
+
+    set_like.short_description = "Set like for comment"
 
 
 admin.site.register(models.Category, CategoryAdmin)
