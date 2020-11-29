@@ -3,6 +3,10 @@ from django.http import HttpResponse
 from . import models
 
 
+def home(request):
+    return render(request, 'blog/home.html')
+
+
 def posts(request):
     posts_all = models.Post.objects.all()
     context = {
