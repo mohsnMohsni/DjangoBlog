@@ -45,13 +45,7 @@ class PostAdmin(admin.ModelAdmin):
         PostSettingStackInline,
     ]
     list_editable = ('draft',)
-    actions = ['make_published', 'make_draft', 'allow_discoussion']
-
-    # def allow_discoussion(self, request, queryset):
-    #     models.PostSetting.objects.create(
-    #         post=self, comment=False, author=False, postsetting__allow_discusstion=True)
-
-    allow_discoussion.short_description = "allow user write comment on posts"
+    actions = ['make_published', 'make_draft']
 
     def make_published(self, request, queryset):
         queryset.update(draft=False)

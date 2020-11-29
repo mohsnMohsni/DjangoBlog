@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<main class="container my-5">
+    <h1 class="h2 my-3 ">{{ post.title }}</h1>
+    <span>Author:
+        <a class='stretched-link text-info font-weight-bold text-decoration-none' href="{% url 'blog:posts' %}">{{ post.author }}</a>
+    </span>
+    <p class="p-5 text-monospace jumbotron">{{ post.content }}</p>
+    <div class=" my-5 py-5 text-center text-primary">
+        <p class=" d-block">
+            Show Author: <span class="font-weight-bold">{{ setting.author }}</span>
+        </p> <br>
+        <p class=" d-block">
+            Show Comment: <span class="font-weight-bold">{{ setting.comment }}</span>
+        </p> <br>
+        <p class=" d-block">
+            Allow Discussions: <span class="font-weight-bold">{{ setting.allow_discussion }}</span>
+        </p> <br>
+    </div>
+</main>
+
+
+{% endblock content %}
