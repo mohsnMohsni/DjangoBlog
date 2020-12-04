@@ -5,7 +5,7 @@ from .validators import user_validator, password_validator
 
 
 class RegisterForm(forms.Form):
-    username = forms.CharField(label=_('Username'), max_length=200,
+    username = forms.CharField(label=_('Username'), max_length=150,
                                widget=forms.TextInput(attrs={'class': 'form-control my-2'}))
     email = forms.EmailField(label=_('Email'), required=True, help_text=_('valid email for reset password'),
                              widget=forms.EmailInput(attrs={'class': 'form-control my-2'}))
@@ -36,6 +36,13 @@ class RegisterForm(forms.Form):
         password = self.cleaned_data.get('password')
         password_validator(password)
         return password
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(label=_('Username'), max_length=150, required=True,
+                               widget=forms.TextInput(attrs={'class': 'form-control my- 2'}))
+    password = forms.CharField(label=_('Password'), max_length=150, required=True,
+                               widget=forms.PasswordInput(attrs={'class': 'form-control my-2'}))
 
 
 class CommentForm(forms.ModelForm):
