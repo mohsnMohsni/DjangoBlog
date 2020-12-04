@@ -27,7 +27,11 @@
       </li>
       {% else %}
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'blog:login' %}">Login<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{% url 'blog:login' %}">Login</a>
+      </li>
+      <div class="text-secondary h2">/</div>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'blog:register' %}">Register</a>
       </li>
       {% endif %}
     </ul>
