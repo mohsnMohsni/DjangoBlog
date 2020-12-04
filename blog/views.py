@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from . import models
+from django.contrib.auth import authenticate, login, logout
 
 
 def home(request):
@@ -28,3 +29,26 @@ def post(request, slug):
 def category(request):
     catagory_all = models.Category.objects.all()
     return HttpResponse('')
+
+
+def log_in(request):
+    if request.user.is_authenticated:
+        return redirect('blog:home')
+    if request.method != 'POST':
+        pass
+    else:
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
+        user = authenticate(request, username=username, password=password)
+        print(username)
+        print(password)
+        print(user)
+        if user:
+            login(request, user)
+            return redirect('blog:home')
+    return render(request, 'blog/login.html', context={})
+
+
+def log_out(request):
+    logout(request)
+    return redirect('blog:home')

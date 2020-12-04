@@ -10,4 +10,6 @@ urlpatterns = [
     path('posts/', views.posts, name='posts'),
     path('posts/<slug:slug>/', views.post, name='post'),
     path('posts/category/', views.category, name='category'),
+    path('login/', views.log_in, name='login'),
+    path('logout/', views.log_out, name='logout')
 ]
