@@ -1,36 +1,7 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from . import models
 from django.contrib.auth import authenticate, login, logout
-from .forms import RegisterForm
 from django.contrib.auth.models import User
-
-
-def home(request):
-    return render(request, 'blog/home.html')
-
-
-def posts(request):
-    posts_all = models.Post.objects.all()
-    context = {
-        'posts': posts_all,
-    }
-    return render(request, 'blog/posts.html', context=context)
-
-
-def post(request, slug):
-    # post = get_object_or_404(models.Post)
-    post_single = models.Post.objects.select_related('setting', 'author').get(slug=slug)
-    context = {
-        'post': post_single,
-        'setting': post_single.setting,
-    }
-    return render(request, 'blog/post.html', context=context)
-
-
-def category(request):
-    catagory_all = models.Category.objects.all()
-    return HttpResponse('')
+from django.shortcuts import render, redirect
+from blog.forms import RegisterForm
 
 
 def log_in(request):
@@ -45,7 +16,7 @@ def log_in(request):
         if user:
             login(request, user)
             return redirect('blog:home')
-    return render(request, 'blog/login.html', context={})
+    return render(request, 'blog/auth/login.html', context={})
 
 
 def log_out(request):
@@ -73,4 +44,4 @@ def register(request):
     context = {
         'form': form
     }
-    return render(request, 'blog/register.html', context=context)
+    return render(request, 'blog/auth/register.html', context=context)

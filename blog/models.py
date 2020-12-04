@@ -56,19 +56,6 @@ class Post(models.Model):
         return converted_date
 
 
-class PostSetting(models.Model):
-    post = models.OneToOneField(
-        "Post", verbose_name=_("post"), on_delete=models.CASCADE,
-        related_name='setting', related_query_name='setting')
-    comment = models.BooleanField(_("comment"), default=True)
-    author = models.BooleanField(_("author"), default=False)
-    allow_discussion = models.BooleanField(_("allow discussion"), default=False)
-
-    class Meta:
-        verbose_name = _("PostSetting")
-        verbose_name_plural = _("PostSettings")
-
-
 class CommentLike(models.Model):
     author = models.ForeignKey(User, verbose_name=_(
         "Author"), on_delete=models.CASCADE)
@@ -114,3 +101,16 @@ class Comment(models.Model):
     def dis_like_count(self):
         q = CommentLike.objects.filter(comment=self, condition=False)
         return q.count()
+
+
+class PostSetting(models.Model):
+    post = models.OneToOneField(
+        "Post", verbose_name=_("post"), on_delete=models.CASCADE,
+        related_name='setting', related_query_name='setting')
+    comment = models.BooleanField(_("comment"), default=True)
+    author = models.BooleanField(_("author"), default=False)
+    allow_discussion = models.BooleanField(_("allow discussion"), default=False)
+
+    class Meta:
+        verbose_name = _("PostSetting")
+        verbose_name_plural = _("PostSettings")

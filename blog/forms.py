@@ -1,42 +1,44 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
+from .models import Comment
+from .validators import user_validator, password_validator
 
 
 class RegisterForm(forms.Form):
-    username = forms.CharField(label=_('username'), max_length=200)
-    email = forms.EmailField(label=_('email'), required=True, help_text=_('valid email for reset password'))
-    password = forms.CharField(label=_('password'), widget=forms.PasswordInput, required=True)
-    password2 = forms.CharField(label=_('confirm password'), widget=forms.PasswordInput, required=True)
-    first_name = forms.CharField(label=_('first name'))
-    last_name = forms.CharField(label=_('last name'))
+    username = forms.CharField(label=_('Username'), max_length=200,
+                               widget=forms.TextInput(attrs={'class': 'form-control my-2'}))
+    email = forms.EmailField(label=_('Email'), required=True, help_text=_('valid email for reset password'),
+                             widget=forms.EmailInput(attrs={'class': 'form-control my-2'}))
+    password = forms.CharField(label=_('Password'), required=True,
+                               widget=forms.PasswordInput(attrs={'class': 'form-control my-2'}))
+    password2 = forms.CharField(label=_('Confirm Password'), required=True,
+                                widget=forms.PasswordInput(attrs={'class': 'form-control my-2'}))
+    first_name = forms.CharField(label=_('First Name'), help_text=_('is not required'),
+                                 widget=forms.TextInput(attrs={'class': 'form-control my-2'}))
+    last_name = forms.CharField(label=_('Last Name'), help_text=_('is not required'),
+                                widget=forms.TextInput(attrs={'class': 'form-control my-2'}))
 
-    # def clean(self):
-    #     password = self.cleaned_data.get('password')
-    #     password2 = self.cleaned_data.get('password2')
-    #
-    #     if password != password2:
-    #         raise forms.ValidationError(
-    #             'passwords are not match'
-    #         )
+    def clean(self):
+        password = self.cleaned_data.get('password')
+        password2 = self.cleaned_data.get('password2')
+
+        if password != password2:
+            raise forms.ValidationError(
+                'passwords are not match'
+            )
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        # user = User.objects.get(username=username, None)
-        user = None
-        if username[0] == int or username.__contains__(' ') or user is not None:
-            raise forms.ValidationError(
-                'username not valid'
-            )
+        user_validator(username)
         return username
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
-
-        if len(password) < 6:
-            raise forms.ValidationError(
-                'password is similar'
-            )
+        password_validator(password)
         return password
 
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('content',)

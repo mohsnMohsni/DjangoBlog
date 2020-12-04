@@ -1,16 +1,16 @@
 from django.contrib import admin
-from . import models
+from .models import *
 
 
 class ChildrenItemInline(admin.TabularInline):
-    model = models.Category
+    model = Category
     fields = ('title', 'slug')
     extra = 1
     show_change_link = True
 
 
 class PostItemInline(admin.TabularInline):
-    model = models.Post
+    model = Post
     fields = ('title',)
     show_change_link = True
 
@@ -28,10 +28,10 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class PostSettingStackInline(admin.StackedInline):
-    model = models.PostSetting
+    model = PostSetting
 
 
-@admin.register(models.Post)
+@admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'convert_create_date',
                     'convert_publish_date', 'draft', 'author', 'comment_count')
@@ -58,7 +58,7 @@ class PostAdmin(admin.ModelAdmin):
     make_draft.short_description = "Join selected to draft"
 
 
-@admin.register(models.Comment)
+@admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('post', 'author', 'is_confirmed',
                     'like_count', 'dis_like_count',)
@@ -68,7 +68,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_per_page = 6
 
 
-@admin.register(models.CommentLike)
+@admin.register(CommentLike)
 class CommentLikeAdmin(admin.ModelAdmin):
     list_display = ('author', 'condition')
     raw_id_fields = ('comment', 'author')
@@ -86,4 +86,4 @@ class CommentLikeAdmin(admin.ModelAdmin):
     set_dislike.short_description = "Set dislike comment"
 
 
-admin.site.register(models.Category, CategoryAdmin)
+admin.site.register(Category, CategoryAdmin)
