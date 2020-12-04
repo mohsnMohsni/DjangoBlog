@@ -19,10 +19,27 @@
         Allow Discussions: <span class="font-weight-bold">{{ setting.allow_discussion }}</span>
       </p> <br>
     </div>
+    <hr>
+    <div class="d-flex align-items-center flex-column">
+      {% for comment in comments %}
+        <div class="card border-primary mb-3 w-75">
+          <div class="card-header">{{ comment.author }}</div>
+          <div class="card-body text-primary">
+            <p class="card-text">{{ comment.content }}</p>
+            <small class="text-muted font-weight-lighter">{{ comment.create_at }}</small>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <hr>
     <div class="d-flex justify-content-center">
-      <form action="" method="post">
-        {{ form }}
-      </form>
+      {% if user.is_authenticated %}
+        <form action="" method="post">
+          {% csrf_token %}
+          {{ form }}
+          <button class="btn btn-outline-primary my-2 d-block float-left">Send comment</button>
+        </form>
+      {% endif %}
     </div>
   </main>
 
