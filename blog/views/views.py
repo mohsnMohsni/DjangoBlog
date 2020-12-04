@@ -28,6 +28,7 @@ def post(request, slug):
         form.post = post_single
         form.author = author
         form.save()
+        form = CommentForm()
     context = {
         'post': post_single,
         'setting': post_single.setting,
