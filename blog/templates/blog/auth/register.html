@@ -2,25 +2,22 @@
 
 {% block content %}
 
-  <main class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
-    <form action="{% url 'blog:register' %}" method="post" style="width: 70vw;">
+  <main class="container d-flex align-items-center justify-content-center my-5">
+    <form  method="post" class="w-100">
       {% csrf_token %}
 
       {% for field in form %}
-        {% if field.errors %}
-          <div class="alert alert-danger" role="alert">
-            {{ field.errors }}
-          </div>
-        {% endif %}
-        <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-        {{ field }}
-        {% if field.help_text %}
-          <small class="form-text text-muted mb-2">{{ field.help_text }}</small>
-        {% endif %}
+        <div class="my-3">
+          <label>{{ field.label }}:</label>
+          {{ field }}
+          {% if field.help_text %}
+            <small class="text-muted">{{ field.help_text }}</small>
+          {% endif %}
+        </div>
       {% endfor %}
 
-      <div class="w-100 d-flex justify-content-center m-3">
-        <button class="btn btn-outline-primary" type="submit">Submit</button>
+      <div class="w-100 d-flex justify-content-center my-4">
+        <button class="btn btn-outline-primary w-50" type="submit">Submit</button>
       </div>
     </form>
   </main>

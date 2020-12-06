@@ -18,8 +18,12 @@ def user_validator(username):
         )
 
 
-def password_validator(password):
-    if len(password) < 8:
+def password_validator(password1, password2):
+    if len(password1) < 8:
         raise forms.ValidationError(
             'password is similar'
+        )
+    if password1 != password2:
+        raise forms.ValidationError(
+            'passwords are not match'
         )
