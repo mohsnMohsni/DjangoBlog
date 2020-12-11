@@ -1,31 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from blog.forms import RegisterForm, LoginForm
 
-
-# def register(request):
-#     if request.method != 'POST':
-#         form = RegisterForm()
-#     else:
-#         form = RegisterForm(data=request.POST)
-#         if form.is_valid():
-#             username = form.cleaned_data.get('username')
-#             password = form.cleaned_data.get('password')
-#             first_name = form.cleaned_data.get('first_name')
-#             last_name = form.cleaned_data.get('last_name')
-#             email = form.cleaned_data.get('email')
-#             user = User.objects.create(username=username, first_name=first_name,
-#                                        last_name=last_name, email=email)
-#             user.set_password(password)
-#             user.save()
-#             login(request, user)
-#             return redirect('blog:home')
-#
-#     context = {
-#         'form': form
-#     }
-#     return render(request, 'blog/auth/register.html', context=context)
+User = get_user_model()
 
 
 def log_in(request):

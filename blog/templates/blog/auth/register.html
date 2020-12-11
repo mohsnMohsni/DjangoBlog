@@ -6,6 +6,12 @@
     <form  method="post" class="w-100">
       {% csrf_token %}
 
+      {% if form.errors %}
+        <div class="alert alert-danger">
+          {{ form.errors }}
+        </div>
+      {% endif %}
+
       {% for field in form %}
         <div class="my-3">
           <label>{{ field.label }}:</label>

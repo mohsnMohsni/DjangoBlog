@@ -1,8 +1,10 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from .models import Comment
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from .validators import user_validator, password_validator
+
+User = get_user_model()
 
 
 class RegisterForm(forms.ModelForm):
