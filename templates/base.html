@@ -18,21 +18,21 @@
         <a class="nav-link" href="{% url 'blog:home' %}">Home</a>
       </li>
       {% if user.is_authenticated %}
-      <li class="nav-item">
-        <a class="nav-link" href="">{{ user.username }}</a>
-      </li>
-      <div class="text-secondary h2">/</div>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'blog:logout' %}">Logout</a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">{{ user.username }}</a>
+        </li>
+        <div class="text-secondary h2">/</div>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'account:logout' %}">Logout</a>
+        </li>
       {% else %}
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'blog:login' %}">Login</a>
-      </li>
-      <div class="text-secondary h2">/</div>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'blog:register' %}">Register</a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'account:login' %}">Login</a>
+        </li>
+        <div class="text-secondary h2">/</div>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'account:register' %}">Register</a>
+        </li>
       {% endif %}
     </ul>
     <form class="form-inline my-2 my-lg-0">
@@ -42,7 +42,7 @@
   </div>
 </nav>
 {% block content %} {% endblock content %}
-<script src="{% static 'bootstrap.js'%}"></script>
+<script src="{% static 'bootstrap.js' %}"></script>
 <script src="{% static 'bootstrap.jquery.js' %}"></script>
 </body>
 </html>

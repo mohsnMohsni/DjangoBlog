@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from blog.models import *
-from blog.forms import RegisterForm, CommentForm
+from blog.forms import CommentForm
 
 
 def home(request):
