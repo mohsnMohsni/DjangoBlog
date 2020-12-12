@@ -18,19 +18,26 @@ def posts(request):
 def post(request, slug):
     post_single = Post.objects.select_related('setting', 'author').get(slug=slug)
     author = User.objects.get(email=request.user.email)
-    comments = Comment.objects.filter(post=post_single)
     form = CommentForm()
+    parent = request.GET.get('parent', -1)
+    try:
+        parent_exist = Comment.objects.get(id=int(parent))
+    except Comment.DoesNotExist:
+        parent_exist = None
     if request.method == 'POST':
         form = CommentForm(data=request.POST)
         form = form.save(commit=False)
         form.post = post_single
         form.author = author
+        if parent and parent_exist:
+            form.parent = parent_exist
         form.save()
         return redirect('blog:post', slug=slug)
     context = {
         'post': post_single,
+        'parent': parent_exist,
         'setting': post_single.setting,
-        'comments': comments,
+        'comments': post_single.get_comments(),
         'form': form,
     }
     return render(request, 'blog/post.html', context=context)

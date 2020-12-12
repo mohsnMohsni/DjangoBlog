@@ -8,8 +8,10 @@
            href="{% url 'blog:posts' %}">{{ post.author|title }}</a>
     </span>
     <div class="card w-100">
-      <img class="card-img-top" src="{{ post.image.url }}" alt=""
-           style="height: 28rem;">
+      {% if post.image %}
+        <img class="card-img-top" src="{{ post.image.url }}" alt=""
+             style="height: 28rem;">
+      {% endif %}
       <div class="card-body jumbotron m-0">
         <p class="card-text">{{ post.content }}</p>
       </div>
@@ -33,11 +35,31 @@
     <div class="d-flex align-items-center flex-column">
       {% for comment in comments %}
         <div class="card border-primary mb-3 w-75">
-          <div class="card-header">{{ comment.author|title }}</div>
+          <div class="card-header">{{ comment.0.author|title }}</div>
           <div class="card-body text-primary">
-            <p class="card-text">{{ comment.content }}</p>
-            <small class="text-muted font-weight-lighter">{{ comment.create_at }}</small>
+            <p class="card-text">{{ comment.0.content }}</p>
+            <div class="d-flex justify-content-between">
+              <small class="text-muted font-weight-lighter">{{ comment.0.create_at }}</small>
+              <a class="text-decoration-none text-muted"
+                 href="{% url 'blog:post' post.slug %}?parent={{ comment.0.id }}#comment">
+                Reply</a>
+            </div>
           </div>
+        </div>
+        <div class="d-flex align-items-end flex-column w-75">
+          {% for child in comment.1 %}
+            <div class="card border-primary mb-2" style="width: 85%;">
+              <div class="card-header d-flex justify-content-between">
+                <span>{{ child.author|title }}</span>
+                <span>replied to: @{{ comment.0.author }}</span>
+              </div>
+              <div class="card-body text-primary">
+                <p class="card-text">{{ child.content }}</p>
+                <small class="text-muted font-weight-lighter">{{ child.create_at }}</small>
+              </div>
+            </div>
+          {% endfor %}
+
         </div>
       {% empty %}
         <div class="h4 text-secondary my-5">
@@ -46,11 +68,16 @@
       {% endfor %}
     </div>
     <hr>
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center" id="comment">
       {% if user.is_authenticated %}
         <form action="" method="post">
           {% csrf_token %}
-          {{ form }}
+          {% if parent %}
+            <label>reply to: @{{ parent.author }}</label>
+          {% else %}
+            <label>{{ form.content.label }}</label>
+          {% endif %}
+          {{ form.content }}
           <div class="d-flex justify-content-end">
             <button class="btn btn-outline-primary my-2 d-block float-left">
               Send comment

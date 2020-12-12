@@ -32,6 +32,14 @@ class Post(models.Model):
     def create_setting(self):
         return PostSetting.objects.create(post=self)
 
+    def get_comments(self):
+        comments = []
+        for com in self.comments.filter(parent=None):
+            comments.append(
+                (com, com.children.all())
+            )
+        return comments
+
     @property
     def comment_count(self):
         q = self.comments.all()

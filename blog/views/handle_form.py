@@ -9,7 +9,7 @@ def add_post(request):
     if request.method == 'GET':
         form = PostForm()
     else:
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             slug = form.cleaned_data.get('slug')
             form = form.save(commit=False)
@@ -32,7 +32,7 @@ def edit_post(request, slug):
     if request.method == 'GET':
         form = EditPostForm(instance=p)
     else:
-        form = EditPostForm(data=request.POST, instance=p)
+        form = EditPostForm(request.POST, instance=p)
         if form.is_valid():
             form.save()
             return redirect('blog:posts')

@@ -39,13 +39,17 @@ class CommentLike(models.Model):
 
 class Comment(models.Model):
     content = models.TextField(_("Content"))
-    post = models.ForeignKey("Post", verbose_name=_(
-        "Post"), on_delete=models.CASCADE, related_name='comments', related_query_name='comments')
+    post = models.ForeignKey("Post", verbose_name=_("Post"),
+                             on_delete=models.CASCADE,
+                             related_name='comments', related_query_name='comments')
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     author = models.ForeignKey(User, verbose_name=_(
         "Author"), on_delete=models.CASCADE)
     is_confirmed = models.BooleanField(_("confirm"), default=True)
+    parent = models.ForeignKey('self', verbose_name=_('parent'), null=True,
+                               on_delete=models.CASCADE, blank=True,
+                               related_name='children', related_query_name='child')
 
     class Meta:
         verbose_name = _("Comment")

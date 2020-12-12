@@ -39,7 +39,7 @@ class PostForm(forms.ModelForm):
 class EditPostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'category', 'content', 'slug',
+        fields = ('title', 'category', 'content',
                   'draft', 'publish_time')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control mb-3'}),
@@ -49,8 +49,3 @@ class EditPostForm(forms.ModelForm):
             'draft': forms.CheckboxInput(attrs={'class': 'form-control mb-3'}),
             'publish_time': forms.SelectDateWidget(attrs={'class': 'form-control mb-3'}),
         }
-
-    def clean_slug(self):
-        slug = self.cleaned_data.get('slug')
-        slug_validator(slug)
-        return slug
