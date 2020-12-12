@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from .validators import password_validator
+from .validators import password_validator, fullname_validator
 from django.utils.translation import ugettext_lazy as _
 
 User = get_user_model()
@@ -26,6 +26,11 @@ class RegisterForm(forms.ModelForm):
         password2 = self.cleaned_data.get('password2')
         password_validator(password1, password2)
         return password2
+
+    def clean_full_name(self):
+        full_name = self.cleaned_data.get('full_name')
+        fullname_validator(full_name)
+        return full_name
 
 
 class LoginForm(forms.Form):

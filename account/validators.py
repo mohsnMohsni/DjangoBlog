@@ -13,3 +13,15 @@ def password_validator(password1, password2):
         raise forms.ValidationError(
             'passwords are not match'
         )
+
+
+def fullname_validator(full_name):
+    try:
+        u = User.objects.get(full_name=full_name)
+    except User.DoesNotExist:
+        u = None
+
+    if u is not None:
+        raise forms.ValidationError(
+            'The name is exist'
+        )

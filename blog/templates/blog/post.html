@@ -18,7 +18,8 @@
       <span>
         {% if user == post.author %}
           <a class="btn-sm btn-outline-secondary text-decoration-none"
-             href="{% url 'blog:edit_post' post.slug %}">Edit Post</a>
+             href="{% url 'blog:edit_post' post.slug %}"
+             style="transition: all 0.6s ease;">Edit Post</a>
         {% endif %}
       </span>
       <span>

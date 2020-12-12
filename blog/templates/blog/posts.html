@@ -2,19 +2,20 @@
 {% block content %}
 
 
-<ul class="list-group">
+  <ul class="list-group">
     {% for post in posts %}
-    <li class="list-group-item">
-        <a class="stretched-link text-info font-weight-boldstretched-link text-info font-weight-bold "
+      <li class="list-group-item d-flex align-items-center">
+        <img src="{{ post.image.url }}" alt="" width="30" height="30"
+             style="border-radius: 50%; border: 1px solid darkgray; padding: 1px; margin: 0 10px;">
+        <a class="stretched-link text-info font-weight-bold text-decoration-none"
            href="{% url 'blog:post' post.slug %}">
+          <span class="text-primary">
             {{ post }}
+          </span>&nbsp;&nbsp;by: {{ post.author|title }}
         </a>
-    </li>
+      </li>
     {% endfor %}
-</ul>
-<ul>
+  </ul>
 
-
-</ul>
 
 {% endblock content %}

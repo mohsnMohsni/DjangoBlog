@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from blog.models import Post, Comment, User
-from blog.forms import PostForm
+from blog.models import Post
+from blog.forms import PostForm, EditPostForm
 
 
 @login_required
@@ -24,5 +24,19 @@ def add_post(request):
     return render(request, 'blog/add_post.html', context=context)
 
 
+@login_required
 def edit_post(request, slug):
-    return
+    p = Post.objects.select_related('setting').get(slug=slug)
+    if request.user != p.author:
+        return redirect('blog:home')
+    if request.method == 'GET':
+        form = EditPostForm(instance=p)
+    else:
+        form = EditPostForm(data=request.POST, instance=p)
+        if form.is_valid():
+            form.save()
+            return redirect('blog:posts')
+    context = {
+        'form': form,
+    }
+    return render(request, 'blog/edit_post.html', context=context)
