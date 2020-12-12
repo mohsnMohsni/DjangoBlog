@@ -37,7 +37,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email'), blank=True, db_index=True, unique=True)
-    full_name = models.CharField(_('full name'), max_length=150)
+    full_name = models.CharField(_('full name'), max_length=150, unique=True)
     avatar = models.ImageField(_('avatar'), upload_to='user/avatar', blank=True)
     is_staff = models.BooleanField(
         _('staff status'),
@@ -62,6 +62,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+
+    def __str__(self):
+        return self.full_name
 
     def clean(self):
         self.email = self.__class__.objects.normalize_email(self.email)

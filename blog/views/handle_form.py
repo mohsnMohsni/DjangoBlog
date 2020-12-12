@@ -22,3 +22,7 @@ def add_post(request):
         'form': form
     }
     return render(request, 'blog/add_post.html', context=context)
+
+
+def edit_post(request, slug):
+    return

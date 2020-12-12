@@ -4,30 +4,43 @@
   <main class="container my-5">
     <h1 class="h2 my-3 ">{{ post.title }}</h1>
     <span>Author:
-        <a class='stretched-link text-info font-weight-bold text-decoration-none'
-           href="{% url 'blog:posts' %}">{{ post.author }}</a>
+        <a class='text-info font-weight-bold text-decoration-none'
+           href="{% url 'blog:posts' %}">{{ post.author|title }}</a>
     </span>
-    <p class="p-5 text-monospace jumbotron">{{ post.content }}</p>
-    <div class=" my-5 py-5 text-center text-primary">
-      <p class=" d-block">
-        Show Author: <span class="font-weight-bold">{{ setting.author }}</span>
-      </p> <br>
-      <p class=" d-block">
-        Show Comment: <span class="font-weight-bold">{{ setting.comment }}</span>
-      </p> <br>
-      <p class=" d-block">
-        Allow Discussions: <span class="font-weight-bold">{{ setting.allow_discussion }}</span>
-      </p> <br>
+    <div class="card w-100">
+      <img class="card-img-top" src="{{ post.image.url }}" alt=""
+           style="height: 28rem;">
+      <div class="card-body jumbotron m-0">
+        <p class="card-text">{{ post.content }}</p>
+      </div>
+    </div>
+    <div class=" mb-5  d-flex justify-content-between text-primary">
+      <span>
+        {% if user == post.author %}
+          <a class="btn-sm btn-outline-secondary text-decoration-none"
+             href="{% url 'blog:edit_post' post.slug %}">Edit Post</a>
+        {% endif %}
+      </span>
+      <span>
+        Show Author: <span class="font-weight-bold">{{ setting.author }}</span>,&nbsp;
+        Show Comment: <span class="font-weight-bold">{{ setting.comment }}</span>,&nbsp;
+        Allow Discussions: <span class="font-weight-bold">
+                            {{ setting.allow_discussion }}</span>,
+      </span>
     </div>
     <hr>
     <div class="d-flex align-items-center flex-column">
       {% for comment in comments %}
         <div class="card border-primary mb-3 w-75">
-          <div class="card-header">{{ comment.author }}</div>
+          <div class="card-header">{{ comment.author|title }}</div>
           <div class="card-body text-primary">
             <p class="card-text">{{ comment.content }}</p>
             <small class="text-muted font-weight-lighter">{{ comment.create_at }}</small>
           </div>
+        </div>
+      {% empty %}
+        <div class="h4 text-secondary my-5">
+          There is no comment yet.
         </div>
       {% endfor %}
     </div>
@@ -37,7 +50,11 @@
         <form action="" method="post">
           {% csrf_token %}
           {{ form }}
-          <button class="btn btn-outline-primary my-2 d-block float-left">Send comment</button>
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-outline-primary my-2 d-block float-left">
+              Send comment
+            </button>
+          </div>
         </form>
       {% endif %}
     </div>
