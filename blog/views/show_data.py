@@ -1,6 +1,5 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from blog.models import *
+from django.shortcuts import render
+from blog.models import Post, Comment, User
 from blog.forms import CommentForm
 
 
@@ -17,7 +16,6 @@ def posts(request):
 
 
 def post(request, slug):
-    # post = get_object_or_404(models.Post)
     post_single = Post.objects.select_related('setting', 'author').get(slug=slug)
     author = User.objects.get(username=request.user.username)
     comments = Comment.objects.filter(post=post_single)
@@ -36,8 +34,3 @@ def post(request, slug):
         'form': form,
     }
     return render(request, 'blog/post.html', context=context)
-
-
-def category(request):
-    catagory_all = Category.objects.all()
-    return HttpResponse('')

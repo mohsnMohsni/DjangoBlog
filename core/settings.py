@@ -26,11 +26,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'account.User'
-
 # Application definition
 
 INSTALLED_APPS = [
+    # ThirdParty Apps
     # Default apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -117,10 +116,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+# Auth Config
+AUTH_USER_MODEL = 'account.User'
+LOGIN_URL = 'account:login'
+
+# Static Config
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'asset'
 
 STATICFILES_DIRS = ((BASE_DIR / 'static'),)
 
+# Media Config
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
