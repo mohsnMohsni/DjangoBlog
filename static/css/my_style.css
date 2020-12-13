@@ -1,0 +1,14 @@
+.my_style-btn {
+    background: transparent;
+    border: none;
+    outline: none !important;
+}
+
+.my_style-space {
+    width: 4px;
+}
+
+.my_style-img {
+    width: 18px;
+    transform: translateY(-3px);
+}

@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from blog.models import Post
+from blog.models import Post, Comment, CommentLike
 from blog.forms import PostForm, EditPostForm
 
 
@@ -40,3 +40,16 @@ def edit_post(request, slug):
         'form': form,
     }
     return render(request, 'blog/edit_post.html', context=context)
+
+
+@login_required
+def comment_like(request, cm_id):
+    author = request.user
+    cm = Comment.objects.get(pk=cm_id)
+    like_status = request.POST.get('like_status')
+    like_status = True if like_status == 'True' else False
+    if CommentLike.objects.filter(author=author, comment=cm).exists():
+        CommentLike.objects.filter(author=author, comment=cm).update(condition=like_status)
+    else:
+        CommentLike.objects.create(author=author, comment=cm, condition=like_status)
+    return redirect('blog:post', slug='Cillum')
