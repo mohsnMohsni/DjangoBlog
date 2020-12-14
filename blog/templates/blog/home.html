@@ -3,23 +3,23 @@
 {% block content %}
 
   <main class="d-flex justify-content-center flex-column align-items-center container">
-
-<span class="display-2 font-weight-bold py-5">
-<a href="{% url 'blog:posts' %}"
-   class="btn btn-outline-primary">See Posts</a>
-</span>
+    <span class="display-2 font-weight-bold py-5">
+      <a href="{% url 'admin:index' %}"
+         class="text-decoration-none btn btn-outline-secondary">
+        Blog Admin Panel
+      </a>
+      <a href="{% url 'blog:posts' %}"
+         class="btn btn-outline-primary">
+        See Posts
+      </a>
+    </span>
     <span class="h4 text-secondary font-weight-bold">
-
-This page show home page and you can see posts in post page.
-
-</span>
+    This page show home page and you can see posts in post page.
+    </span>
 
     <span class="h5 text-info font-weight-bold">
-
-Just click on button above.
-
-</span>
-
+    Just click on button above.
+    </span>
   </main>
 
 {% endblock content %}

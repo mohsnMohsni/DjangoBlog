@@ -17,7 +17,7 @@ def posts(request):
 
 def post(request, slug):
     post_single = Post.objects.select_related('setting', 'author').get(slug=slug)
-    author = User.objects.get(email=request.user.email)
+    author = User.objects.get(email=request.user.email) if request.user.is_authenticated else None
     form = CommentForm()
     parent = request.GET.get('parent', -1)
     try:

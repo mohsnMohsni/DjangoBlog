@@ -52,4 +52,4 @@ def comment_like(request, cm_id):
         CommentLike.objects.filter(author=author, comment=cm).update(condition=like_status)
     else:
         CommentLike.objects.create(author=author, comment=cm, condition=like_status)
-    return redirect('blog:post', slug='Cillum')
+    return redirect('blog:posts')

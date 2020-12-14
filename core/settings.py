@@ -122,9 +122,9 @@ LOGIN_URL = 'account:login'
 
 # Static Config
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'asset'
+# STATIC_ROOT = BASE_DIR / 'asset'
 
-STATICFILES_DIRS = ((BASE_DIR / 'static'),)
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Media Config
 MEDIA_ROOT = BASE_DIR / 'media'
