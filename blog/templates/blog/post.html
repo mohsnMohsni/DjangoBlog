@@ -33,90 +33,7 @@
     </div>
     <hr>
     <div class="d-flex align-items-center flex-column">
-      {% for comment in comments %}
-        <div class="card border-primary mb-3 w-75">
-          <div class="card-header">{{ comment.0.author|title }}</div>
-          <div class="card-body text-primary">
-            <p class="card-text">{{ comment.0.content }}</p>
-            <div class="d-flex justify-content-between">
-              <small class="text-muted font-weight-lighter">{{ comment.0.create_at }}</small>
-              <div class="d-flex justify-content-between" style="width: 20%">
-                <div class="d-flex" style="width: 50px;">
-                  <form action="{% url 'blog:comment_like' cm_id=comment.0.id %}"
-                        method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="like_status" value="False">
-                    <button class="text-muted my_style-btn" style="width: 45px;">
-                      <img class="my_style-img"
-                           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABP0lEQVRIid3Uu0pDQRSF4Q/sbdTgBdGAgp2CYGUhiZY+g0/gq1hZiYWFtW3ewsIIBrVQFMSAFsYYQTQWJ8FDmHNJgoUumGZmzfrZezbDf9IcKpj6LUAFbVRR6Oxt4hpHWIp5izjAHT5wj0MspAEKqAUgW3jrBO1iB+8dX+9qYjsJMI2nmDkEaeMrITwOWQwB9gLmJEjWOgoBagnmXkgzB6AeAjynXIhDNvCaAfjESC+gmnHpws8Ir6OR4r0NVbCfo/S8lRyHAMuyJ6SN8xyQ9RCA6PXzTElau06SwmFM1L88kHglZdEI1zGTBoA16Q+YBNlCKSu8qxJaOSHxdvWlbcl/TlolfamMl5TgFq6GhaziMRDeEPV9AmeGbFcRl7HwB6zEzruQG8wPAoBJnIo+xVBIAbODhnc1ivFhQ/6WvgEV/OIklDEUsQAAAABJRU5ErkJggg=="
-                           alt=""/>
-                      {{ comment.0.dis_like_count }}
-                    </button>
-                  </form>
-                  <form action="{% url 'blog:comment_like' cm_id=comment.0.id  %}"
-                        method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="like_status" value="True">
-                    <button class="text-muted my_style-btn" style="width: 45px;">
-                      <img class="my_style-img"
-                           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAA/klEQVRIie3VPUrEUBiF4UcLLSxkQBD8BXEXgqWNaxAXIO5CN6C9zBJEsFErsdBC0EZQFEewsxEcqym08AZCvPmbpJwXPgiXc99DvhRhRAljOeeL2MAM3nGKz0ymg03M4wNnIVvIJA4xwE9q+thJ5XbDWTozwAEm8uTjOMlcys4e9ksyx8H1j+2Si3VmK1Zw1WLBZawgu9Mm85VI07v6jrUOST9WcNNiQdS1pr0Vrec1d1uQHxW92hTuG8jvgqOQOfSGkPfC3Uos46WG/A2rVeUJS3iuIH/FSl15wgKeCuSPIdOIWfEP/6DGzsvo4Dolv/X3r2iVaVzgPDyPaIdf3gzJzXRN+VAAAAAASUVORK5CYII="
-                           alt=""/>
-                      {{ comment.0.like_count }}
-                    </button>
-                  </form>
-                </div>
-                <a class="text-decoration-none text-muted"
-                   href="{% url 'blog:post' post.slug %}?parent={{ comment.0.id }}#comment">
-                  Reply</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex align-items-end flex-column w-75">
-          {% for child in comment.1 %}
-            <div class="card border-primary mb-2" style="width: 85%;">
-              <div class="card-header d-flex justify-content-between">
-                <span>{{ child.author|title }}</span>
-                <span>replied to: @{{ comment.0.author }}</span>
-              </div>
-              <div class="card-body text-primary">
-                <p class="card-text">{{ child.content }}</p>
-                <div class="d-flex justify-content-between">
-                  <small class="text-muted font-weight-lighter">{{ child.create_at }}</small>
-                  <div class="d-flex" style="width: 15%;">
-                    <form action="{% url 'blog:comment_like' cm_id=child.id %}"
-                          method="post">
-                      {% csrf_token %}
-                      <input type="hidden" name="like_status" value="False">
-                      <button class="text-muted my_style-btn">
-                        <img class="my_style-img"
-                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABP0lEQVRIid3Uu0pDQRSF4Q/sbdTgBdGAgp2CYGUhiZY+g0/gq1hZiYWFtW3ewsIIBrVQFMSAFsYYQTQWJ8FDmHNJgoUumGZmzfrZezbDf9IcKpj6LUAFbVRR6Oxt4hpHWIp5izjAHT5wj0MspAEKqAUgW3jrBO1iB+8dX+9qYjsJMI2nmDkEaeMrITwOWQwB9gLmJEjWOgoBagnmXkgzB6AeAjynXIhDNvCaAfjESC+gmnHpws8Ir6OR4r0NVbCfo/S8lRyHAMuyJ6SN8xyQ9RCA6PXzTElau06SwmFM1L88kHglZdEI1zGTBoA16Q+YBNlCKSu8qxJaOSHxdvWlbcl/TlolfamMl5TgFq6GhaziMRDeEPV9AmeGbFcRl7HwB6zEzruQG8wPAoBJnIo+xVBIAbODhnc1ivFhQ/6WvgEV/OIklDEUsQAAAABJRU5ErkJggg=="
-                             alt=""/>
-                        {{ child.dis_like_count }}
-                      </button>
-                    </form>
-                    <form action="{% url 'blog:comment_like' cm_id=child.id %}"
-                          method="post">
-                      {% csrf_token %}
-                      <input type="hidden" name="like_status" value="True">
-                      <button class="text-muted my_style-btn">
-                        <img class="my_style-img"
-                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAA/klEQVRIie3VPUrEUBiF4UcLLSxkQBD8BXEXgqWNaxAXIO5CN6C9zBJEsFErsdBC0EZQFEewsxEcqym08AZCvPmbpJwXPgiXc99DvhRhRAljOeeL2MAM3nGKz0ymg03M4wNnIVvIJA4xwE9q+thJ5XbDWTozwAEm8uTjOMlcys4e9ksyx8H1j+2Si3VmK1Zw1WLBZawgu9Mm85VI07v6jrUOST9WcNNiQdS1pr0Vrec1d1uQHxW92hTuG8jvgqOQOfSGkPfC3Uos46WG/A2rVeUJS3iuIH/FSl15wgKeCuSPIdOIWfEP/6DGzsvo4Dolv/X3r2iVaVzgPDyPaIdf3gzJzXRN+VAAAAAASUVORK5CYII="
-                             alt=""/>
-                        {{ child.like_count }}
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-      {% empty %}
-        <div class="h4 text-secondary my-5">
-          There is no comment yet.
-        </div>
-      {% endfor %}
+      {% include 'blog/comment.html' %}
     </div>
     <hr>
     <div class="d-flex justify-content-center" id="comment">
@@ -126,7 +43,7 @@
           {% if parent %}
             <label>reply to: @{{ parent.author }}</label>
           {% else %}
-            <label>{{ form.content.label }}</label>
+            <label>{{ form.content.label }}:</label>
           {% endif %}
           {{ form.content }}
           <div class="d-flex justify-content-end">
