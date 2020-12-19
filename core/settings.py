@@ -119,6 +119,7 @@ USE_TZ = True
 # Auth Config
 AUTH_USER_MODEL = 'account.User'
 LOGIN_URL = 'account:login'
+LOGIN_REDIRECT_URL = 'blog:home'
 
 # Static Config
 STATIC_URL = '/static/'

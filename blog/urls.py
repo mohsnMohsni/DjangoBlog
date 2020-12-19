@@ -1,15 +1,18 @@
 from django.urls import path
-from blog.views import (home, post, posts, add_post, edit_post, comment_like)
+from blog.views import (
+    HomeView, PostView, PostsView, AddPostView, EditPostView, CommentLikeView
+)
 
 
 app_name = 'blog'
 
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('posts/', posts, name='posts'),
-    path('posts/<slug:slug>/', post, name='post'),
-    path('add_post/', add_post, name='add_post'),
-    path('edit_post/<slug:slug>/', edit_post, name='edit_post'),
-    path('comment_like/<int:cm_id>/', comment_like, name='comment_like'),
+    path('', HomeView.as_view(), name='home'),
+    path('posts/', PostsView.as_view(), name='posts'),
+    path('post/<slug:slug>/', PostView.as_view(), name='post'),
+] + [
+    path('add_post/', AddPostView.as_view(), name='add_post'),
+    path('edit_post/<slug:slug>/', EditPostView.as_view(), name='edit_post'),
+    path('comment_like/<int:cm_id>/', CommentLikeView.as_view(), name='comment_like'),
 ]

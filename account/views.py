@@ -1,50 +1,28 @@
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect
+from .forms import RegisterForm, AuthenticationForm
 from django.contrib.auth import get_user_model
-from django.shortcuts import render, redirect
-from .forms import RegisterForm, LoginForm
+from django.views.generic.edit import CreateView
+from django.contrib.auth.views import LogoutView, LoginView
 
 User = get_user_model()
 
 
-def log_in(request):
-    if request.user.is_authenticated:
+class SingInView(LoginView):
+    template_name = 'auth/login.html'
+    redirect_authenticated_user = True
+    form_class = AuthenticationForm
+
+
+class SignOutView(LogoutView):
+    template_name = 'blog/home.html'
+
+
+class SignUpView(CreateView):
+    template_name = 'auth/register.html'
+    form_class = RegisterForm
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.set_password(obj.password)
+        obj.save()
         return redirect('blog:home')
-    if request.method == 'GET':
-        form = LoginForm()
-    else:
-        form = LoginForm(data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user:
-                login(request, user)
-                return redirect('blog:home')
-
-    context = {
-        'form': form,
-    }
-    return render(request, 'auth/login.html', context=context)
-
-
-def log_out(request):
-    logout(request)
-    return redirect('blog:home')
-
-
-def register(request):
-    if request.method == 'GET':
-        form = RegisterForm()
-    else:
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data.get('password'))
-            form.save()
-            login(request, user)
-            return redirect('blog:home')
-
-    context = {
-        'form': form,
-    }
-    return render(request, 'auth/register.html', context=context)
