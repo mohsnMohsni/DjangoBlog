@@ -1,8 +1,9 @@
 from django.test import TestCase
 from .models import User
+from django.test import Client
 
 
-class UserTest(TestCase):
+class UserModelTest(TestCase):
     def setUp(self) -> None:
         User.objects.create_user(email='mohsn@example.com', full_name='Mohsn Mohsni', password='mohsn')
         User.objects.create_user(email='mina@example.com', full_name='Mina Mohamadi', password='mina')
@@ -22,3 +23,20 @@ class UserTest(TestCase):
         self.assertEqual(ali.__str__(), 'Ali Alae')
         self.assertEqual(hospin.is_superuser, True)
         self.assertEqual(hospin.is_staff, True)
+
+
+class UserViewTest(TestCase):
+    def setUp(self) -> None:
+        self.client = Client()
+
+    def test_user(self):
+        get_response1 = self.client.get('/auth/login/')
+        self.assertEqual(get_response1.status_code, 200)
+        post_response1 = self.client.post('/auth/login/', email='mohsn@gmail.com', password='mohsn')
+        self.assertEqual(post_response1.status_code, 200)
+        get_response2 = self.client.get('/auth/logout/')
+        self.assertEqual(get_response2.status_code, 200)
+        get_response3 = self.client.get('/auth/register/')
+        self.assertEqual(get_response3.status_code, 200)
+        post_response3 = self.client.post('/auth/register/', email='mohsn@gmail.com', password='mohsn')
+        self.assertEqual(post_response3.status_code, 200)
