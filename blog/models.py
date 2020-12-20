@@ -28,8 +28,10 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-    def create_setting(self):
-        return PostSetting.objects.create(post=self)
+    def create_setting(self, comment=True, author=True, allow_discussion=False):
+        return PostSetting.objects.create(
+            post=self, comment=comment, author=author, allow_discussion=allow_discussion
+        )
 
     def get_comments(self):
         comments = []
