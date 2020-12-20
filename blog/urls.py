@@ -1,6 +1,7 @@
 from django.urls import path
 from blog.views import (
-    HomeView, PostView, PostsView, AddPostView, EditPostView, CommentLikeView
+    HomeView, PostView, PostsView,
+    AddPostView, EditPostView, CommentLikeView, AddCommentView
 )
 
 
@@ -14,5 +15,6 @@ urlpatterns = [
 ] + [
     path('add_post/', AddPostView.as_view(), name='add_post'),
     path('edit_post/<slug:slug>/', EditPostView.as_view(), name='edit_post'),
-    path('comment_like/<int:cm_id>/', CommentLikeView.as_view(), name='comment_like'),
+    path('add_comment/<slug:slug>/', AddCommentView.as_view(), name='add_comment'),
+    path('comment_like/<slug:slug>/', CommentLikeView.as_view(), name='comment_like'),
 ]

@@ -38,14 +38,16 @@
     <hr>
     <div class="d-flex justify-content-center" id="comment">
       {% if user.is_authenticated %}
-        <form method="post">
+        <form method="post" action="{% url 'blog:add_comment' post.slug %}">
           {% csrf_token %}
           {% if parent %}
             <label>reply to: @{{ parent.author }}</label>
+            <input type="hidden" name="parent" value="{{ parent.id }}">
           {% else %}
             <label>{{ form.content.label }}:</label>
           {% endif %}
           {{ form.content }}
+          <input type="hidden" name="post" value="{{ post.slug }}">
           <div class="d-flex justify-content-end">
             <button class="btn btn-outline-primary my-2 d-block float-left">
               Send comment

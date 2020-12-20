@@ -7,9 +7,10 @@
         <small class="text-muted font-weight-lighter">{{ comment.0.create_at }}</small>
         <div class="d-flex justify-content-between" style="width: 20%">
           <div class="d-flex" style="width: 50px;">
-            <form action="{% url 'blog:comment_like' cm_id=comment.0.id %}"
+            <form action="{% url 'blog:comment_like' post.slug %}"
                   method="post">
               {% csrf_token %}
+              <input type="hidden" name="cm_id" value="{{ comment.0.id }}">
               <input type="hidden" name="like_status" value="False">
               <button class="text-muted my_style-btn" style="width: 45px;">
                 <img class="my_style-img"
@@ -18,9 +19,10 @@
                 {{ comment.0.dis_like_count }}
               </button>
             </form>
-            <form action="{% url 'blog:comment_like' cm_id=comment.0.id %}"
+            <form action="{% url 'blog:comment_like' post.slug %}"
                   method="post">
               {% csrf_token %}
+              <input type="hidden" name="cm_id" value="{{ comment.0.id }}">
               <input type="hidden" name="like_status" value="True">
               <button class="text-muted my_style-btn" style="width: 45px;">
                 <img class="my_style-img"
@@ -49,9 +51,10 @@
           <div class="d-flex justify-content-between">
             <small class="text-muted font-weight-lighter">{{ child.create_at }}</small>
             <div class="d-flex" style="width: 15%;">
-              <form action="{% url 'blog:comment_like' cm_id=child.id %}"
+              <form action="{% url 'blog:comment_like' post.slug %}"
                     method="post">
                 {% csrf_token %}
+                <input type="hidden" name="cm_id" value="{{ child.id }}">
                 <input type="hidden" name="like_status" value="False">
                 <button class="text-muted my_style-btn">
                   <img class="my_style-img"
@@ -60,9 +63,10 @@
                   {{ child.dis_like_count }}
                 </button>
               </form>
-              <form action="{% url 'blog:comment_like' cm_id=child.id %}"
+              <form action="{% url 'blog:comment_like' post.slug %}"
                     method="post">
                 {% csrf_token %}
+                <input type="hidden" name="cm_id" value="{{ child.id }}">
                 <input type="hidden" name="like_status" value="True">
                 <button class="text-muted my_style-btn">
                   <img class="my_style-img"
