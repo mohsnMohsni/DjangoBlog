@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, reverse
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth import get_user_model
 from django.views.generic.edit import CreateView
@@ -6,7 +6,7 @@ from django.contrib.auth.views import LogoutView, LoginView
 from django.views.generic import ListView
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import Group
-from django.contrib.auth.mixins import LoginRequiredMixin
+from .mixins import AuthorAccessMixin
 from blog.models import Post
 
 User = get_user_model()
@@ -16,6 +16,12 @@ class SingInView(LoginView):
     template_name = 'account/auth/login.html'
     redirect_authenticated_user = True
     form_class = LoginForm
+
+    def get_success_url(self):
+        if self.request.user.groups.filter(name='author').exists() or self.request.user.is_superuser:
+            return reverse('account:profile')
+        else:
+            return reverse('blog:home')
 
 
 class SignOutView(LogoutView):
@@ -39,7 +45,7 @@ class SignUpView(CreateView):
         return redirect('blog:home')
 
 
-class ProfileView(LoginRequiredMixin, ListView):
+class ProfileView(AuthorAccessMixin, ListView):
     template_name = 'account/profile/index.html'
     context_object_name = 'posts'
 

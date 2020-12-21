@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post
 
 
-class AuthorAccessMixin(LoginRequiredMixin):
+class PostAuthorAccessMixin(LoginRequiredMixin):
 
     def dispatch(self, request, *args, **kwargs):
         p = Post.objects.get(slug=kwargs.get('slug'))

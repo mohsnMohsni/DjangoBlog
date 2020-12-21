@@ -7,42 +7,22 @@
       <div class="mdl-layout__header-row">
         <div class="mdl-layout-spacer"></div>
         <a class="text-decoration-none font-weight-bold avatar-dropdown"
+           href="{% url 'blog:add_post' %}"
+           style="color: #8a8888;font-size: small;">Add Post</a>
+        <a class="text-decoration-none font-weight-bold avatar-dropdown"
            href="{% url 'blog:home' %}"
            style="color: #8a8888;font-size: small;">Home</a>
+        <a class="text-decoration-none font-weight-bold avatar-dropdown"
+           href="{% url 'account:logout' %}"
+           style="color: #8a8888;font-size: small;">Logout</a>
         {% if user.avatar %}
           <div class="avatar-dropdown" id="icon">
             <span>{{ user.full_name|title }}</span>
             <img src="{{ user.avatar.url }}" alt="" class="rounded-pill">
           </div>
         {% endif %}
-        <a class="text-decoration-none font-weight-bold avatar-dropdown"
-           href="{% url 'account:logout' %}"
-           style="color: #8a8888;font-size: small;">Logout</a>
       </div>
     </header>
-
-    <div class="mdl-layout__drawer">
-      <header>{{ user.full_name|title }}</header>
-      <div class="scroll__wrapper" id="scroll__wrapper">
-        <div class="scroller" id="scroller">
-          <div class="scroll__container" id="scroll__container">
-            <nav class="mdl-navigation">
-              <a class="mdl-navigation__link text-decoration-none" href="{% url 'blog:add_post' %}">
-                <i class="material-icons">multiline_chart</i>
-                Add Post
-              </a>
-              <div class="mdl-layout-spacer"></div>
-              <hr>
-              <a class="mdl-navigation__link text-decoration-none" href="#">
-                <i class="material-icons" role="presentation">link</i>
-                {{ user.email }}
-              </a>
-            </nav>
-          </div>
-        </div>
-        <div class='scroller__bar' id="scroller__bar"></div>
-      </div>
-    </div>
 
     <main class="mdl-layout__content">
 

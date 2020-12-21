@@ -1,4 +1,5 @@
 {% load static %}
+{% load permission %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,9 +20,11 @@
         <a class="nav-link" href="{% url 'blog:home' %}">Home</a>
       </li>
       {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'account:profile' %}">Profile</a>
-        </li>
+        {% if user|is_author %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'account:profile' %}">Profile</a>
+          </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link" href="">{{ user.full_name|title }}</a>
         </li>

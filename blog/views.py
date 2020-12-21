@@ -2,11 +2,11 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, reverse
 from .models import Post, Comment, CommentLike
 from .forms import PostForm, EditPostForm, CommentForm
-
-from .mixins import AuthorAccessMixin
+from .mixins import PostAuthorAccessMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, FormView
+from account.mixins import AuthorAccessMixin
 
 
 class HomeView(TemplateView):
@@ -52,7 +52,7 @@ class AddCommentView(CreateView):
         return super().form_valid(form)
 
 
-class AddPostView(LoginRequiredMixin, CreateView):
+class AddPostView(AuthorAccessMixin, CreateView):
     model = Post
     template_name = 'blog/add_post.html'
     form_class = PostForm
@@ -69,7 +69,7 @@ class AddPostView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class EditPostView(AuthorAccessMixin, UpdateView):
+class EditPostView(AuthorAccessMixin, PostAuthorAccessMixin, UpdateView):
     model = Post
     form_class = EditPostForm
     template_name = 'blog/edit_post.html'
