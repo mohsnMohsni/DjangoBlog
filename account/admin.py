@@ -13,5 +13,5 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'full_name', 'password')}),
         ('Personal Option', {'fields': ('avatar',)}),
-        ('Status', {'fields': ('is_staff', 'is_active')})
+        ('Status', {'fields': ('is_staff', 'is_active', 'groups')})
     )
