@@ -6,14 +6,15 @@
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
         <div class="mdl-layout-spacer"></div>
-        <div class="avatar-dropdown" id="icon">
-          <span>{{ user.full_name|title }}</span>
-          <img src="{{ user.avatar.url }}" alt="" class="rounded-pill">
-        </div>
-        <div class="avatar-dropdown">
-          <a class="text-decoration-none font-weight-bold" href="{% url 'account:logout' %}"
-             style="color: #8a8888;font-size: small;">Logout</a>
-        </div>
+        {% if user.avatar %}
+          <div class="avatar-dropdown" id="icon">
+            <span>{{ user.full_name|title }}</span>
+            <img src="{{ user.avatar.url }}" alt="" class="rounded-pill">
+          </div>
+        {% endif %}
+        <a class="text-decoration-none font-weight-bold avatar-dropdown"
+           href="{% url 'account:logout' %}"
+           style="color: #8a8888;font-size: small;">Logout</a>
       </div>
     </header>
 

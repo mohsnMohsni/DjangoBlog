@@ -15,12 +15,23 @@
       </div>
     </div>
   </div>
+{% else %}
+  <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--2-col-phone">
+    <div class="mdl-card mdl-shadow--2dp cotoneaster">
+      <div class="d-flex justify-content-center">
+        <h2 class="mdl-card__title-text text-light">No Post yet.</h2>
+      </div>
+    </div>
+  </div>
 {% endif %}
 <!-- Line chart-->
 <div class="mdl-cell mdl-cell--7-col-desktop mdl-cell--7-col-tablet mdl-cell--4-col-phone">
+  <input type="hidden" id="post-count" value="{{ posts.count }}">
+  <input type="hidden" id="comment-count" value="{{ comment_count }}">
+  <input type="hidden" id="draft-count" value="{{ draft_count }}">
   <div class="mdl-card mdl-shadow--2dp line-chart">
     <div class="mdl-card__title">
-      <h2 class="mdl-card__title-text">Your Post Status</h2>
+      <h2 class="mdl-card__title-text">Your Posts Status</h2>
     </div>
     <div class="mdl-card__supporting-text">
       <div class="line-chart__container">

@@ -45,3 +45,9 @@ class ProfileView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comment_count'] = sum([p.comment_count for p in context['posts']])
+        context['draft_count'] = Post.objects.filter(author=self.request.user, draft=True).count()
+        return context
