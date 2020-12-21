@@ -1,22 +1,44 @@
-{% extends 'base.html' %}
-{% block content %}
-
-  <main class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-    <form action="{% url 'account:login' %}" method="post" style="width: 70vw;">
-      {% csrf_token %}
-
-      <div>
-        {% if form.errors %}
-          <div class="alert alert-danger">{{ form.errors }}</div>
-        {% endif %}
+{% extends 'account/account_base.html' %}
+{% block title %} Login {% endblock title %}
+{% block body %}
+  <div class="mdl-layout mdl-js-layout color--gray is-small-screen login">
+    <main class="mdl-layout__content">
+      <div class="mdl-card mdl-card__login mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text color--dark-gray">
+          <div class="mdl-grid">
+            <form method="post">
+              {% csrf_token %}
+              {% if form.errors %}
+                <div class="alert alert-danger">
+                  {{ form.errors }}
+                </div>
+              {% endif %}
+              <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+                <span class="mdl-card__title-text text-color--smooth-gray">SIMPLE BLOG</span>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+                <span class="login-name text-color--white">Sign in</span>
+                <span class="login-secondary-text text-color--smoke">Enter fields to sign in </span>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+                  {{ form.username }}
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+                  {{ form.password }}
+                </div>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell">
+                <a href="{% url 'account:register' %}" class="login-link">Don't have account?</a>
+                <div class="mdl-layout-spacer"></div>
+                <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue">
+                  SIGN IN
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-
-      {{ form }}
-      <div class="d-flex justify-content-between align-items-center py-2 my-2">
-        <button type="submit" class="btn btn-primary w-25">Submit</button>
-        <a href="{% url 'account:register' %}" class="text-info text-decoration-none">have no account? </a>
-      </div>
-    </form>
-  </main>
-
+    </main>
+  </div>
 {% endblock %}

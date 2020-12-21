@@ -1,31 +1,49 @@
-{% extends 'base.html' %}
+{% extends 'account/account_base.html' %}
 
-{% block content %}
+{% block title %} Register {% endblock title %}
 
-  <main class="container d-flex align-items-center justify-content-center my-5">
-    <form method="post" class="w-100">
-      {% csrf_token %}
+{% block body %}
 
-      {% if form.errors %}
-        <div class="alert alert-danger">
-          {{ form.errors }}
+  <div class="mdl-layout mdl-js-layout color--gray is-small-screen login">
+    <main class="mdl-layout__content">
+      <div class="mdl-card mdl-card__login mdl-shadow--2dp">
+        <div class="mdl-card__supporting-text color--dark-gray">
+          <div class="mdl-grid">
+            <form method="post">
+              {% csrf_token %}
+              <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+                <span class="mdl-card__title-text text-color--smooth-gray">SIMPLE BLOG</span>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+                <span class="login-name text-color--white">Sign up</span>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+                  {{ form.full_name }}
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+                  {{ form.email }}
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+                  {{ form.password }}
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+                  {{ form.password2 }}
+                </div>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell">
+                <a href="{% url 'account:login' %}" class="login-link">I have already signed up</a>
+                <div class="mdl-layout-spacer"></div>
+                <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue">
+                  SIGN UP
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      {% endif %}
-
-      {% for field in form %}
-        <div class="my-3">
-          <label>{{ field.label }}:</label>
-          {{ field }}
-          {% if field.help_text %}
-            <small class="text-muted">{{ field.help_text }}</small>
-          {% endif %}
-        </div>
-      {% endfor %}
-
-      <div class="w-100 d-flex justify-content-center my-4">
-        <button class="btn btn-outline-primary w-50" type="submit">Submit</button>
       </div>
-    </form>
-  </main>
+    </main>
+  </div>
 
-{% endblock %}
+
+{% endblock body %}

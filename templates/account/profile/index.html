@@ -1,4 +1,4 @@
-{% extends 'account/profile/profile_base.html' %}
+{% extends 'account/profile/../account_base.html' %}
 {% block title %}{{ user.full_name|title }}{% endblock title %}
 {% block body %}
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header is-small-screen">
@@ -6,6 +6,9 @@
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
         <div class="mdl-layout-spacer"></div>
+        <a class="text-decoration-none font-weight-bold avatar-dropdown"
+           href="{% url 'blog:home' %}"
+           style="color: #8a8888;font-size: small;">Home</a>
         {% if user.avatar %}
           <div class="avatar-dropdown" id="icon">
             <span>{{ user.full_name|title }}</span>

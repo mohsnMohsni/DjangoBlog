@@ -3,7 +3,7 @@ from .forms import RegisterForm, LoginForm
 from django.contrib.auth import get_user_model
 from django.views.generic.edit import CreateView
 from django.contrib.auth.views import LogoutView, LoginView
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import LoginRequiredMixin

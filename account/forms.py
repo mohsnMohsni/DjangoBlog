@@ -10,16 +10,17 @@ User = get_user_model()
 class RegisterForm(forms.ModelForm):
     password2 = forms.CharField(label=_('confirm password'), max_length=100, required=True,
                                 widget=forms.PasswordInput(
-                                    attrs={'class': 'form-control text-info'}
+                                    attrs={'class': 'mdl-textfield__input',
+                                           'placeholder': 'Confirm Password'}
                                 ))
 
     class Meta:
         model = User
         fields = ('email', 'full_name', 'password')
         widgets = {
-            'password': forms.PasswordInput(attrs={'class': 'form-control text-info'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'full_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'mdl-textfield__input', 'placeholder': 'Password'}),
+            'email': forms.TextInput(attrs={'class': 'mdl-textfield__input', 'placeholder': 'Email'}),
+            'full_name': forms.TextInput(attrs={'class': 'mdl-textfield__input', 'placeholder': 'Full Name'}),
         }
 
     def clean_password2(self):
@@ -36,10 +37,12 @@ class RegisterForm(forms.ModelForm):
 
 class LoginForm(AuthenticationForm):
     username = UsernameField(label=_("Email"), widget=forms.TextInput(
-        attrs={'autofocus': True, 'class': 'form-control my- 2'}))
+        attrs={'autofocus': True, 'class': 'mdl-textfield__input', 'id': 'e-mail',
+               'placeholder': 'Email'}))
     password = forms.CharField(
         label=_("Password"),
         strip=False,
         widget=forms.PasswordInput(attrs={'autocomplete': 'current-password',
-                                          'class': 'form-control my- 2'}),
+                                          'class': 'mdl-textfield__input', 'id': 'password',
+                                          'placeholder': 'Password'}),
     )
