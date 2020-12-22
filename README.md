@@ -6,6 +6,6 @@ Just develope a simple blog for learning django
 
 
 ### Some issue that handel in this blog: ### 
-   -Register by email and active link
-   -Simple panel for manage your account
-   -Authunticate 
+   - Register by email and active link
+   - Simple panel for manage your account
+   - Authunticate 
