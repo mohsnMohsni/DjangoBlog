@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, reverse
-from .models import Post, Comment, CommentLike
+from .models import Post, Comment, CommentLike, Category
 from .forms import PostForm, EditPostForm, CommentForm
 from .mixins import PostAuthorAccessMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,19 +10,37 @@ from account.mixins import AuthorAccessMixin
 
 
 class HomeView(TemplateView):
-    template_name = 'blog/home.html'
+    template_name = 'blog/Show/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = Category.objects.filter(parent=None)
+        return context
 
 
 class PostsView(ListView):
     model = Post
     paginate_by = 4
-    template_name = 'blog/posts.html'
+    template_name = 'blog/Show/posts.html'
+
+
+class CategoryView(ListView):
+    template_name = 'blog/Show/category.html'
+    context_object_name = 'post_list'
+
+    def get_queryset(self):
+        try:
+            cat = Category.objects.get(title=self.kwargs.get('cat'))
+            posts = Post.objects.filter(category=cat)
+        except Category.DoesNotExist:
+            posts = []
+        return posts
 
 
 class PostView(DetailView):
     model = Post
     context_object_name = 'post'
-    template_name = 'blog/post.html'
+    template_name = 'blog/Show/post.html'
 
     def get_context_data(self, **kwargs):
         cm_parent = None
@@ -54,7 +72,7 @@ class AddCommentView(CreateView):
 
 class AddPostView(AuthorAccessMixin, CreateView):
     model = Post
-    template_name = 'blog/add_post.html'
+    template_name = 'blog/Handle/add_post.html'
     form_class = PostForm
 
     def get_success_url(self):
@@ -72,7 +90,7 @@ class AddPostView(AuthorAccessMixin, CreateView):
 class EditPostView(AuthorAccessMixin, PostAuthorAccessMixin, UpdateView):
     model = Post
     form_class = EditPostForm
-    template_name = 'blog/edit_post.html'
+    template_name = 'blog/Handle/edit_post.html'
 
     def get_success_url(self):
         return reverse('blog:post', kwargs={'slug': self.kwargs.get('slug')})

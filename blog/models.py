@@ -15,8 +15,9 @@ class Post(models.Model):
     draft = models.BooleanField(_("Draft"), default=True, db_index=True)
     image = models.ImageField(
         _("image"), upload_to='posts/images/', null=True, blank=True)
-    category = models.ForeignKey("Category", verbose_name=_(
-        "Category"), on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ForeignKey("Category", verbose_name=_("Category"),
+                                 on_delete=models.CASCADE, null=True, blank=True,
+                                 related_name='posts', related_query_name='posts')
     author = models.ForeignKey(User, verbose_name=_("Author"), on_delete=models.CASCADE,
                                related_name="posts", related_query_name="children")
 
@@ -82,6 +83,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.slug
+
+    def get_children(self):
+        return self.children.all()
 
 
 class CommentLike(models.Model):

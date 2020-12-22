@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  {% if post_list.count==0 %}
+    <ul class="list-group">
+      {% for post in post_list %}
+        <li class="list-group-item d-flex align-items-center">
+          {% if post.image %}
+            <img src="{{ post.image.url }}" alt="" width="30" height="30"
+                 style="border-radius: 50%; border: 1px solid darkgray; padding: 1px; margin: 0 10px;">
+          {% endif %}
+          <a class="stretched-link text-info font-weight-bold text-decoration-none"
+             href="{% url 'blog:post' post.slug %}">
+          <span class="text-primary">
+            {{ post }}
+          </span>&nbsp;&nbsp;by: {{ post.author|title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <div class="pagination d-flex justify-content-center my-3">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}"
+             class="btn-sm btn-info text-decoration-none">Previous</a>
+        {% endif %}
+
+      <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"
+           class="btn-sm btn-info text-decoration-none">Next</a>
+      {% endif %}
+    </span>
+    </div>
+  {% else %}
+    <div class="d-flex justify-content-center align-items-center text-muted" style="height: 85vh;">
+      There is No pos.
+    </div>
+  {% endif %}
+
+{% endblock content %}

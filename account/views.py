@@ -33,7 +33,7 @@ class SingInView(LoginView):
 
 
 class SignOutView(LogoutView):
-    template_name = 'blog/home.html'
+    template_name = 'blog/Show/home.html'
 
 
 class SignUpView(CreateView):
