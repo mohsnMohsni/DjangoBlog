@@ -1,0 +1,12 @@
+<h1>{{ domain }} | SIMPLE BLOG</h1>
+
+Hello, {{ user.full_name }}
+
+Now you can click on this link for active your account:
+
+Current Link: <a href="http://{{ domain }}{% url 'account:activate' uidb64=uid token=token %}">
+  http://{{ domain }}{% url 'account:activate' uidb64=uid token=token %}</a>
+
+Be successful.
+
+

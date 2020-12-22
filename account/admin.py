@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    list_display = ('email', 'is_staff')
+    list_display = ('email', 'is_staff', 'is_active')
     ordering = ('email',)
     add_fieldsets = (
         (None, {'fields': ('email', 'full_name', 'password1', 'password2')}),

@@ -1,7 +1,7 @@
 {% extends "account/account_base.html" %}
 {% load i18n %}
 
-{% block title %}Forbidden 403{% endblock title %}
+{% block title %}sending email is successful{% endblock title %}
 
 {% block body %}
 
@@ -14,17 +14,21 @@
               <span class="mdl-card__title-text text-color--smooth-gray">SIMPLE BLOG</span>
             </div>
             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
-              <span class="text--huge color-text--light-blue">403</span>
+              <span class="text--huge color-text--light-blue"> sent.</span>
             </div>
             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
-              <span class="text--sorry text-color--white">
-                Sorry, but you don't have access right.
-              </span>
+              <small class="text--sorry text-muted">Active link is sent to your mail.</small>
+            </div>
+            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+              <a href="{% url 'account:login' %}"
+                 class="mdl-button mdl-js-button color-text--light-blue pull-right text-decoration-none">
+                Login
+              </a>
             </div>
             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
               <a href="{% url 'blog:home' %}"
                  class="mdl-button mdl-js-button color-text--light-blue pull-right text-decoration-none">
-                Go Back
+                Go Home
               </a>
             </div>
           </div>
