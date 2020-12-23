@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 INSTALLED_APPS = [
     # ThirdParty Apps
+    'ckeditor',
+    'crispy_forms',
     # Default apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -124,6 +126,7 @@ LOGIN_REDIRECT_URL = 'account:profile'
 
 # Static Config
 STATIC_URL = '/static/'
+# STATIC_ROOT = BASE_DIR / 'asset'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Media Config
@@ -137,3 +140,26 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = config('EMAIL_PORT', cast=int)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', cast=str)
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', cast=str)
+
+# Crispy Config
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# CK Editor Config
+CKEDITOR_CONFIGS = {
+    'awesome_ckeditor': {
+        'toolbar': 'Basic',
+    },
+    'default': {
+        'skin': 'moono-lisa',
+        'toolbar': 'Custom',
+        'height': 300,
+        'width': '86vw',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter',
+             'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink'],
+            ['RemoveFormat']
+        ]
+    }
+}

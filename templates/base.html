@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="{% static 'css/bootstrap.style.css' %}">
   <link rel="stylesheet" href="{% static 'css/my_style.css' %}">
   <title>Blog</title>
+  {% block extra_link %}{% endblock %}
 </head>
 <body>
 <nav class="navbar navbar-expand navbar-dark bg-dark">
@@ -20,7 +21,7 @@
         <a class="nav-link" href="{% url 'blog:home' %}">Home</a>
       </li>
       {% if user.is_authenticated %}
-        {% if user|is_author %}
+        {% if user|is_author or user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'account:profile' %}">Profile</a>
           </li>

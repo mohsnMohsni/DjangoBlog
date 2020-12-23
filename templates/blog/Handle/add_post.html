@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block extra_link %}
+  <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
+{% endblock extra_link %}
 {% block content %}
-
+  {{ form.media }}
   <main class="container my-3">
     <form method="post" enctype="multipart/form-data" class="form-group">
       {% csrf_token %}
@@ -10,8 +14,9 @@
         </div>
       {% endif %}
       {% for field in form %}
-        <label>{{ field.label }}:</label>
-        {{ field }}
+        <div class="w-100" style="box-sizing: border-box;">
+          {{ field|as_crispy_field }}
+        </div>
       {% endfor %}
       <div class="my-4 w-100 d-flex justify-content-center">
         <button class="btn btn-secondary w-50">Submit</button>

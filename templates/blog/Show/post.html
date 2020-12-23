@@ -13,7 +13,7 @@
              style="height: 28rem;">
       {% endif %}
       <div class="card-body jumbotron m-0">
-        <p class="card-text">{{ post.content }}</p>
+        <p class="card-text">{{ post.content|safe }}</p>
       </div>
     </div>
     <div class=" mb-5  d-flex justify-content-between text-primary">
