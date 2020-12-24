@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import redirect, reverse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Post, Comment, CommentLike, Category
@@ -53,7 +53,6 @@ class PostView(DetailView):
         context['form'] = CommentForm()
         context['parent'] = cm_parent
         context['setting'] = context.get('post').setting
-        context['comments'] = context.get('post').get_comments()
         return context
 
 
@@ -99,24 +98,12 @@ class EditPostView(AuthorAccessMixin, PostAuthorAccessMixin, UpdateView):
         return reverse('blog:post', kwargs={'slug': self.kwargs.get('slug')})
 
 
-# class CommentLikeView(LoginRequiredMixin, FormView):
-#
-#     def post(self, request, *args, **kwargs):
-#         author = request.user
-#         cm = Comment.objects.get(pk=request.POST.get('cm_id'))
-#         like_status = request.POST.get('like_status')
-#         like_status = True if like_status == 'True' else False
-#         if CommentLike.objects.filter(author=author, comment=cm).exists():
-#             CommentLike.objects.filter(author=author, comment=cm).update(condition=like_status)
-#         else:
-#             CommentLike.objects.create(author=author, comment=cm, condition=like_status)
-#         return redirect('blog:post', slug=kwargs.get('slug'))
-
-
 @csrf_exempt
 def like_comment(request):
     data = json.loads(request.body)
+    print(data)
     author = request.user
+    print(author)
     try:
         cm = Comment.objects.get(pk=data['comment_id'])
     except Comment.DoesNotExist:
@@ -130,5 +117,18 @@ def like_comment(request):
     return HttpResponse('ok')
 
 
-def get_comment(request):
-    return HttpResponse()
+@csrf_exempt
+def get_comments(request, slug):
+    comments = Post.objects.get(slug=slug).get_comments()
+    comments_dic = list()
+    for parent, children in comments:
+        children_list = list()
+        for child in children:
+            children_list.append({'author': child.author.full_name, 'content': child.content,
+                                  'create_at': child.create_at, 'like_count': child.like_count,
+                                  'dislike_count': child.dis_like_count, 'id': child.id})
+        comments_dic.append({'author': parent.author.full_name, 'content': parent.content, 'id': parent.id,
+                             'create_at': parent.create_at, 'like_count': parent.like_count,
+                             'dislike_count': parent.dis_like_count, 'children': children_list})
+
+    return JsonResponse(comments_dic, safe=False)

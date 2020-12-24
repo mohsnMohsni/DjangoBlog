@@ -137,3 +137,8 @@ class Comment(models.Model):
     def dis_like_count(self):
         q = CommentLike.objects.filter(comment=self, condition=False)
         return q.count()
+
+    @property
+    def convert_create_date(self):
+        converted_date = f"{self.create_at.day} - {self.create_at.month} - {self.create_at.year}"
+        return converted_date
