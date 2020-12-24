@@ -1,5 +1,6 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect, reverse
+from django.views.decorators.csrf import csrf_exempt
 from .models import Post, Comment, CommentLike, Category
 from .forms import PostForm, EditPostForm, CommentForm
 from .mixins import PostAuthorAccessMixin
@@ -7,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, FormView
 from account.mixins import AuthorAccessMixin
+import json
 
 
 class HomeView(TemplateView):
@@ -97,15 +99,36 @@ class EditPostView(AuthorAccessMixin, PostAuthorAccessMixin, UpdateView):
         return reverse('blog:post', kwargs={'slug': self.kwargs.get('slug')})
 
 
-class CommentLikeView(LoginRequiredMixin, FormView):
+# class CommentLikeView(LoginRequiredMixin, FormView):
+#
+#     def post(self, request, *args, **kwargs):
+#         author = request.user
+#         cm = Comment.objects.get(pk=request.POST.get('cm_id'))
+#         like_status = request.POST.get('like_status')
+#         like_status = True if like_status == 'True' else False
+#         if CommentLike.objects.filter(author=author, comment=cm).exists():
+#             CommentLike.objects.filter(author=author, comment=cm).update(condition=like_status)
+#         else:
+#             CommentLike.objects.create(author=author, comment=cm, condition=like_status)
+#         return redirect('blog:post', slug=kwargs.get('slug'))
 
-    def post(self, request, *args, **kwargs):
-        author = request.user
-        cm = Comment.objects.get(pk=request.POST.get('cm_id'))
-        like_status = request.POST.get('like_status')
-        like_status = True if like_status == 'True' else False
-        if CommentLike.objects.filter(author=author, comment=cm).exists():
-            CommentLike.objects.filter(author=author, comment=cm).update(condition=like_status)
-        else:
-            CommentLike.objects.create(author=author, comment=cm, condition=like_status)
-        return redirect('blog:post', slug=kwargs.get('slug'))
+
+@csrf_exempt
+def like_comment(request):
+    data = json.loads(request.body)
+    author = request.user
+    try:
+        cm = Comment.objects.get(pk=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('Bad Request', status=404)
+    cm_like = CommentLike.objects.filter(author=author, comment=cm)
+    if cm_like.exists():
+        cm_like.update(condition=data['condition'])
+    else:
+        CommentLike.objects.create(author=author, comment=cm, condition=data['condition'])
+
+    return HttpResponse('ok')
+
+
+def get_comment(request):
+    return HttpResponse()

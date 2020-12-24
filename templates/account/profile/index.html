@@ -48,7 +48,11 @@
               <tbody>
               {% for post in posts %}
                 <tr>
-                  <td class="mdl-data-table__cell--non-numeric">{{ post.title|truncatechars:15 }}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                      <a class="text-decoration-none stretched-link text-light"
+                          href="{% url 'blog:edit_post' post.slug %}">
+                        {{ post.title|truncatechars:15 }}</a>
+                    </td>
                   <td class="mdl-data-table__cell--non-numeric">
                     {% if post.draft %}
                       <span class="label label--mini color--light-blue">Draft</span>
