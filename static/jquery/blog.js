@@ -1,26 +1,16 @@
-function likeComment(comment_id, condition) {
-    let json_data = JSON.stringify({comment_id, condition});
-    $.ajax({
-        type: "POST",
-        url: "/comment_like/",
-        data: json_data,
-        success: function (response) {
-            let path = window.location.pathname;
-            slug = path.match(/[^\/]*/g)[3]
-            getComments(`/get_commnets/${slug}/`)
-        },
-    });
-}
-
 function getComments(path) {
-    console.log(path)
     $.ajax({
         type: "GET",
         url: path,
         success: function (response) {
             let render_response = "";
-            for (let parent of response) {
-                render_response += `  
+            if (response.length === 0) {
+                $("#comments").html(
+                    '<div class="text-muted h2 my-3">There is No comment yet.</div>'
+                );
+            } else {
+                for (let parent of response) {
+                    render_response += `  
                 <div class="card border-primary mb-3 w-75">
                     <div class="card-header">${parent.author}</div>
                     <div class="card-body text-primary">
@@ -45,14 +35,14 @@ function getComments(path) {
                             </button>
                           </div>
                           <a class="text-decoration-none text-muted"
-                             href="{% url 'blog:post' post.slug %}?parent={{ comment.0.id }}#comment">
+                             href="#commentForm" onclick="replyComment('${parent.author}', '${parent.id}')">
                             Reply</a>
                         </div>
                       </div>
                     </div>
                   </div>`;
-                for (let child of parent.children) {
-                    render_response += `
+                    for (let child of parent.children) {
+                        render_response += `
                     <div class="d-flex align-items-end flex-column w-75">
                       <div class="card border-primary mb-2" style="width: 85%;">
                         <div class="card-header d-flex justify-content-between">
@@ -83,9 +73,46 @@ function getComments(path) {
                         </div>
                       </div>
                   </div>`;
+                    }
                 }
+                $("#comments").html(render_response);
             }
-            $("#comments").html(render_response);
+        },
+    });
+}
+
+function replyComment(cm_author, parent_id) {
+    $("#contentLabel").text(`Reply to @${cm_author}`);
+    $("#cmParent").val(parent_id);
+}
+
+function likeComment(comment_id, condition) {
+    let json_data = JSON.stringify({comment_id, condition});
+    $.ajax({
+        type: "POST",
+        url: "/comment_like/",
+        data: json_data,
+        success: function (response) {
+            let path = window.location.pathname;
+            slug = path.match(/[^\/]*/g)[3];
+            getComments(`/get_comments/${slug}/`);
+        },
+    });
+}
+
+function sendComment(slug) {
+    let comment = $("#addComment").val();
+    let cmParent = $("#cmParent").val();
+    let json_data = JSON.stringify({comment, slug, cm_parent: cmParent});
+    $.ajax({
+        type: "POST",
+        url: "/add_comment/",
+        data: json_data,
+        success: function (response) {
+            let path = window.location.pathname;
+            slug = path.match(/[^\/]*/g)[3];
+            console.log(`/get_comments/${slug}/`);
+            getComments(`/get_comments/${slug}/`);
         },
     });
 }

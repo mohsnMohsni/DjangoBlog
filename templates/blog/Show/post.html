@@ -28,24 +28,20 @@
     <hr>
     <div class="d-flex align-items-center flex-column" id="comments"></div>
     <hr>
-    <div class="d-flex justify-content-center" id="comment">
+    <div class="d-flex flex-column align-items-center" id="commentFrom">
       {% if user.is_authenticated %}
-        <form method="post" action="{% url 'blog:add_comment' post.slug %}">
-          {% csrf_token %}
-          {% if parent %}
-            <label>reply to: @{{ parent.author }}</label>
-            <input type="hidden" name="parent" value="{{ parent.id }}">
-          {% else %}
-            <label>{{ form.content.label }}:</label>
-          {% endif %}
-          {{ form.content }}
-          <input type="hidden" name="post" value="{{ post.slug }}">
-          <div class="d-flex justify-content-end">
-            <button class="btn btn-outline-primary my-2 d-block float-left">
-              Send comment
-            </button>
-          </div>
-        </form>
+        <div class="d-flex justify-content-start w-75">
+          <label for="addComment" id="contentLabel">Content:</label>
+        </div>
+        <input type="hidden" value="" id="cmParent">
+        <textarea name="comment" id="addComment" cols="30" rows="10"
+                  class="form-control d-block w-75" style="resize: none;"></textarea>
+        <div class="d-flex justify-content-end w-75">
+          <button class="btn btn-outline-primary my-2 d-block float-left"
+                  onclick="sendComment('{{ post.slug }}')">
+            Send comment
+          </button>
+        </div>
       {% endif %}
     </div>
   </main>

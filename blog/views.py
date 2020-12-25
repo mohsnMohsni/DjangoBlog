@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import redirect, reverse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Post, Comment, CommentLike, Category
-from .forms import PostForm, EditPostForm, CommentForm
+from .forms import PostForm, EditPostForm
 from .mixins import PostAuthorAccessMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DetailView
@@ -50,26 +50,9 @@ class PostView(DetailView):
         if self.request.GET.get('parent'):
             cm_parent = Comment.objects.get(pk=int(self.request.GET.get('parent')))
         context = super().get_context_data(**kwargs)
-        context['form'] = CommentForm()
         context['parent'] = cm_parent
         context['setting'] = context.get('post').setting
         return context
-
-
-class AddCommentView(CreateView):
-    model = Comment
-    fields = ('content',)
-
-    def get_success_url(self):
-        return reverse('blog:post', kwargs={'slug': self.kwargs.get('slug')})
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.author = self.request.user
-        obj.post = Post.objects.get(slug=self.request.POST.get('post'))
-        if self.request.POST.get('parent'):
-            obj.parent = Comment.objects.get(pk=int(self.request.POST.get('parent')))
-        return super().form_valid(form)
 
 
 class AddPostView(AuthorAccessMixin, CreateView):
@@ -99,25 +82,6 @@ class EditPostView(AuthorAccessMixin, PostAuthorAccessMixin, UpdateView):
 
 
 @csrf_exempt
-def like_comment(request):
-    data = json.loads(request.body)
-    print(data)
-    author = request.user
-    print(author)
-    try:
-        cm = Comment.objects.get(pk=data['comment_id'])
-    except Comment.DoesNotExist:
-        return HttpResponse('Bad Request', status=404)
-    cm_like = CommentLike.objects.filter(author=author, comment=cm)
-    if cm_like.exists():
-        cm_like.update(condition=data['condition'])
-    else:
-        CommentLike.objects.create(author=author, comment=cm, condition=data['condition'])
-
-    return HttpResponse('ok')
-
-
-@csrf_exempt
 def get_comments(request, slug):
     comments = Post.objects.get(slug=slug).get_comments()
     comments_dic = list()
@@ -132,3 +96,56 @@ def get_comments(request, slug):
                              'dislike_count': parent.dis_like_count, 'children': children_list})
 
     return JsonResponse(comments_dic, safe=False)
+
+
+class AddCommentView(CreateView):
+    model = Comment
+    fields = ('content',)
+
+    def get_success_url(self):
+        return reverse('blog:post', kwargs={'slug': self.kwargs.get('slug')})
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.author = self.request.user
+        obj.post = Post.objects.get(slug=self.request.POST.get('post'))
+        if self.request.POST.get('parent'):
+            obj.parent = Comment.objects.get(pk=int(self.request.POST.get('parent')))
+        return super().form_valid(form)
+
+
+@csrf_exempt
+def add_comment(request):
+    data = json.loads(request.body)
+    author = request.user
+    if not author.is_authenticated:
+        return HttpResponse('No Access', status=403)
+    try:
+        post = Post.objects.get(slug=data.get('slug'))
+    except Post.DoesNotExist:
+        return HttpResponse('Bad Request', status=404)
+    try:
+        parent = Comment.objects.get(pk=data.get('cm_parent'))
+        Comment.objects.create(author=author, content=data.get('comment'), post=post, parent=parent)
+    except:
+        Comment.objects.create(author=author, content=data.get('comment'), post=post)
+    return HttpResponse('ok')
+
+
+@csrf_exempt
+def like_comment(request):
+    data = json.loads(request.body)
+    author = request.user
+    if not author.is_authenticated:
+        return HttpResponse('No Access', status=403)
+    try:
+        cm = Comment.objects.get(pk=data.get('comment_id'))
+    except Comment.DoesNotExist:
+        return HttpResponse('Bad Request', status=404)
+    cm_like = CommentLike.objects.filter(author=author, comment=cm)
+    if cm_like.exists():
+        cm_like.update(condition=data.get('condition'))
+    else:
+        CommentLike.objects.create(author=author, comment=cm, condition=data.get('condition'))
+
+    return HttpResponse('ok')
