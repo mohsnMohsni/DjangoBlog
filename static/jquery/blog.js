@@ -115,4 +115,4 @@ function sendComment(slug) {
             getComments(`/get_comments/${slug}/`);
         },
     });
-}
+ }

@@ -1,13 +1,13 @@
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
-from django.shortcuts import redirect, reverse
+from django.shortcuts import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Post, Comment, CommentLike, Category
 from .forms import PostForm, EditPostForm
 from .mixins import PostAuthorAccessMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DetailView
-from django.views.generic.edit import CreateView, UpdateView, FormView
+from django.views.generic.edit import CreateView, UpdateView
 from account.mixins import AuthorAccessMixin
+from django.db.utils import IntegrityError
 import json
 
 
@@ -46,11 +46,7 @@ class PostView(DetailView):
     template_name = 'blog/Show/post.html'
 
     def get_context_data(self, **kwargs):
-        cm_parent = None
-        if self.request.GET.get('parent'):
-            cm_parent = Comment.objects.get(pk=int(self.request.GET.get('parent')))
         context = super().get_context_data(**kwargs)
-        context['parent'] = cm_parent
         context['setting'] = context.get('post').setting
         return context
 
@@ -98,22 +94,6 @@ def get_comments(request, slug):
     return JsonResponse(comments_dic, safe=False)
 
 
-class AddCommentView(CreateView):
-    model = Comment
-    fields = ('content',)
-
-    def get_success_url(self):
-        return reverse('blog:post', kwargs={'slug': self.kwargs.get('slug')})
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.author = self.request.user
-        obj.post = Post.objects.get(slug=self.request.POST.get('post'))
-        if self.request.POST.get('parent'):
-            obj.parent = Comment.objects.get(pk=int(self.request.POST.get('parent')))
-        return super().form_valid(form)
-
-
 @csrf_exempt
 def add_comment(request):
     data = json.loads(request.body)
@@ -127,7 +107,7 @@ def add_comment(request):
     try:
         parent = Comment.objects.get(pk=data.get('cm_parent'))
         Comment.objects.create(author=author, content=data.get('comment'), post=post, parent=parent)
-    except:
+    except Comment.DoesNotExist:
         Comment.objects.create(author=author, content=data.get('comment'), post=post)
     return HttpResponse('ok')
 
@@ -137,15 +117,14 @@ def like_comment(request):
     data = json.loads(request.body)
     author = request.user
     if not author.is_authenticated:
-        return HttpResponse('No Access', status=403)
+        return HttpResponse('Not Access', status=403)
     try:
         cm = Comment.objects.get(pk=data.get('comment_id'))
     except Comment.DoesNotExist:
         return HttpResponse('Bad Request', status=404)
-    cm_like = CommentLike.objects.filter(author=author, comment=cm)
-    if cm_like.exists():
-        cm_like.update(condition=data.get('condition'))
-    else:
+    try:
         CommentLike.objects.create(author=author, comment=cm, condition=data.get('condition'))
+    except (CommentLike.DoesNotExist, IntegrityError):
+        CommentLike.objects.filter(author=author, comment=cm).update(condition=data.get('condition'))
 
     return HttpResponse('ok')
