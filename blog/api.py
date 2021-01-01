@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from .serializers import PostSerializer
-from .models import Post
+from .serializers import PostSerializer, CommentSerializer
+from .models import Post, Comment
 
 
 @csrf_exempt
@@ -23,3 +23,13 @@ def post_list(request):
 @csrf_exempt
 def post_detail(request):
     pass
+
+
+@csrf_exempt
+def comments_list(request):
+    if request.method == 'GET':
+        comments = Comment.objects.all()
+        serializer = CommentSerializer(comments, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    elif request.method == 'POST':
+        return JsonResponse({'ok': 'hel'})

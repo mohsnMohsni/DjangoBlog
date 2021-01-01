@@ -3,7 +3,7 @@ from blog.views import (
     HomeView, PostView, PostsView, CategoryView,
     AddPostView, EditPostView, add_comment, like_comment, get_comments
 )
-from .api import post_list
+from .api import post_list, comments_list
 
 app_name = 'blog'
 
@@ -19,5 +19,5 @@ urlpatterns = [
                   path('comment_like/', like_comment, name='like_comment'),
                   path('get_comments/<slug:slug>/', get_comments, name='comments'),
                   path('posts_api/', post_list, name='posts_api'),
-
+                  path('comments_api/', comments_list, name='comment_api'),
               ]

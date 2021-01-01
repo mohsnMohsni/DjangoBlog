@@ -37,9 +37,25 @@ class PostSerializer(serializers.Serializer):
         return instance
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class CommentModelSerializer(serializers.ModelSerializer):
     author_detail = UserSerializer(source='author', read_only=True)
 
     class Meta:
         model = Comment
         fields = "__all__"
+
+
+class CommentSerializer(serializers.Serializer):
+    content = serializers.CharField()
+    post = serializers.PrimaryKeyRelatedField(
+        queryset=Post.objects.all()
+    )
+    create_at = serializers.CharField(read_only=True)
+    update_at = serializers.CharField(read_only=True)
+    author = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all()
+    )
+    parent = serializers.PrimaryKeyRelatedField(
+        queryset=Comment.objects.all()
+    )
+    author_detail = UserSerializer(source='author', read_only=True)
