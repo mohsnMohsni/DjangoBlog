@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     # ThirdParty Apps
     'ckeditor',
     'crispy_forms',
+    'rest_framework',
+    'markdown',
     # Default apps
     'django.contrib.admin',
     'django.contrib.auth',

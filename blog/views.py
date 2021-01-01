@@ -107,7 +107,7 @@ def add_comment(request):
     try:
         parent = Comment.objects.get(pk=data.get('cm_parent'))
         Comment.objects.create(author=author, content=data.get('comment'), post=post, parent=parent)
-    except Comment.DoesNotExist:
+    except (Comment.DoesNotExist, ValueError):
         Comment.objects.create(author=author, content=data.get('comment'), post=post)
     return HttpResponse('ok')
 
