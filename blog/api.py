@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from .serializers import PostSerializer, CommentSerializer
@@ -21,8 +21,21 @@ def post_list(request):
 
 
 @csrf_exempt
-def post_detail(request):
-    pass
+def post_detail(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.method == 'GET':
+        serializer = PostSerializer(post)
+        return JsonResponse(serializer.data)
+    if request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = PostSerializer(instance=post, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+    if request.method == 'DELETE':
+        post.delete()
+        return HttpResponse('successful', status=204)
 
 
 @csrf_exempt
