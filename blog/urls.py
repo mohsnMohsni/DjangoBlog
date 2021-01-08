@@ -3,7 +3,9 @@ from blog.views import (
     HomeView, PostView, PostsView, CategoryView,
     AddPostView, EditPostView, add_comment, like_comment, get_comments
 )
-from .api import post_list, comments_list, post_detail, PostList, PostDetail
+from .api import (post_list, post_detail, comments_list, PostList, PostDetail,
+                  PostListMixin, PostDetailMixin, PostListGeneric, PostDetailGeneric,
+                  PostModelView)
 
 app_name = 'blog'
 
@@ -14,12 +16,25 @@ urlpatterns = [
                   path('category/<str:cat>/', CategoryView.as_view(), name='category'),
                   path('add_post/', AddPostView.as_view(), name='add_post'),
                   path('edit_post/<slug:slug>/', EditPostView.as_view(), name='edit_post'),
-              ] + [
                   path('add_comment/', add_comment, name='add_comment'),
                   path('comment_like/', like_comment, name='like_comment'),
                   path('get_comments/<slug:slug>/', get_comments, name='comments'),
-                  path('posts_api/', PostList.as_view(), name='posts_api'),
-                  path('comments_api/', comments_list, name='comment_api'),
-                  path('post_api/<int:pk>/', PostDetail.as_view(), name='post_detail')
+              ] + [
+                  path('post_list/', post_list, name='post_list'),
+                  path('comments_list/', comments_list, name='comment_list'),
+                  path('post_detail/<int:pk>/', post_detail, name='post_detail'),
+                  path('class_postlist/', PostList.as_view(), name='class_postlist'),
+                  path('class_postdetail/<int:pk>/', PostDetail.as_view(),
+                       name='class_postdetail'),
+                  path('mixin_postlist/', PostListMixin.as_view(), name='mixin_postlist'),
+                  path('mixin_postdetail/<int:pk>/', PostDetailMixin.as_view(),
+                       name='mixin_postdetail'),
+                  path('generic_postlist/', PostListGeneric.as_view(), name='generic_postlist'),
+                  path('generic_postdetail/<int:pk>/', PostDetailGeneric.as_view(),
+                       name='generic_postdetail'),
+                  path('modelview_post/', PostModelView.as_view({"get": "list",
+                                                                 "post": "create",
+                                                                 "put": "update",
+                                                                 "delete": "destroy"}),
+                       name='modelview_post'),
               ]
-
