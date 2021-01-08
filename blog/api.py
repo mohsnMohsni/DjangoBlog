@@ -15,7 +15,7 @@ from rest_framework.mixins import (UpdateModelMixin, RetrieveModelMixin, Destroy
 
 
 # Class Api ModelViewView
-class PostModelView(ModelViewSet):
+class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
