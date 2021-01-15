@@ -3,11 +3,15 @@ from .serializers import PostModelSerializer, CategoryModelSerializer, CommentMo
 from .models import Post, Comment, Category
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from .permissions import HasAccessPermission
 
 
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostModelSerializer
+    authentication_classes = ([SessionAuthentication, BasicAuthentication])
+    permission_classes = [HasAccessPermission]
 
     @action(detail=True, methods=['GET'])
     def comments(self, request, pk=None):
