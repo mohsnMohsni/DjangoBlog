@@ -13,9 +13,9 @@ router = DefaultRouter()
 post_router = router.register(r'router_post', PostViewSet)
 
 post_viewset = PostViewSet.as_view({"get": "list",
-                                           "post": "create",
-                                           "put": "update",
-                                           "delete": "destroy"})
+                                    "post": "create",
+                                    "put": "update",
+                                    "delete": "destroy"})
 
 app_name = 'blog'
 
@@ -43,5 +43,6 @@ urlpatterns = [
                   path('generic_postdetail/<int:pk>/', PostDetailGeneric.as_view(),
                        name='generic_postdetail'),
                   path('modelview_post/', post_viewset, name='modelview_post'),
+              ] + [
                   path('router/', include(router.urls)),
               ]

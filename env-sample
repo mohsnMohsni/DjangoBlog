@@ -1,3 +1,5 @@
+IS_LOCAL=True
+DEBUG=sample
 SECRET_KEY=sample
 EMAIL_HOST=sample
 EMAIL_PORT=sample
