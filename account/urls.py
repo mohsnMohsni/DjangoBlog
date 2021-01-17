@@ -1,5 +1,9 @@
-from django.urls import path, re_path
+from django.urls import path
 from .views import SingInView, SignUpView, SignOutView, ProfileView, activate
+from core.urls import router
+from .api import UserViewSet
+
+router.register(r'users', UserViewSet)
 
 app_name = 'account'
 
