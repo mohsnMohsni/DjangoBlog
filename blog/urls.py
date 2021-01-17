@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from blog.views import (
     HomeView, PostView, PostsView, CategoryView,
     AddPostView, EditPostView, add_comment, like_comment, get_comments
