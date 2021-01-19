@@ -2,6 +2,7 @@ from rest_framework.decorators import action
 from .serializers import PostModelSerializer, CategoryModelSerializer, CommentModelSerializer
 from .models import Post, Comment, Category
 from rest_framework.response import Response
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from .permissions import HasAccessPermission
@@ -43,8 +44,12 @@ class PostViewSet(ModelViewSet):
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
+    authentication_classes = ([SessionAuthentication, BasicAuthentication])
+    permission_classes = [IsAdminUser]
 
 
 class CommentViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentModelSerializer
+    authentication_classes = ([SessionAuthentication, BasicAuthentication])
+    permission_classes = [HasAccessPermission]

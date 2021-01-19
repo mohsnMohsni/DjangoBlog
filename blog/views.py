@@ -11,20 +11,15 @@ from django.db.utils import IntegrityError
 import json
 
 
-class HomeView(TemplateView):
-    template_name = 'blog/Show/home.html'
+class PostsView(ListView):
+    model = Post
+    paginate_by = 10
+    template_name = 'blog/Show/posts.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = Category.objects.filter(parent=None)
-        print(context['category'])
         return context
-
-
-class PostsView(ListView):
-    model = Post
-    paginate_by = 4
-    template_name = 'blog/Show/posts.html'
 
 
 class CategoryView(ListView):

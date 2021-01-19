@@ -171,7 +171,7 @@ try:
     config('IS_LOCAL')
     REST_FRAMEWORK = {
         'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-        'PAGE_SIZE': 100,
+        'PAGE_SIZE': 10,
         'DEFAULT_AUTHENTICATION_CLASSES': [
             'rest_framework_simplejwt.authentication.JWTAuthentication',
         ]
@@ -179,7 +179,7 @@ try:
 except UndefinedValueError:
     REST_FRAMEWORK = {
         'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-        'PAGE_SIZE': 100,
+        'PAGE_SIZE': 10,
         'DEFAULT_AUTHENTICATION_CLASSES': [
             'rest_framework.authentication.BasicAuthentication',
             'rest_framework.authentication.SessionAuthentication',
